@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUMBER SHOP - VPN PANEL</title>
+    <title>NUMBER SHOP - PREMIUM VPN STORE</title>
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
     <style>
         :root {
-            --bg: #030712;
-            --card-bg: rgba(17, 24, 39, 0.7);
-            --border-glow: #45f3ff;
-            --text: #ffffff;
-            --text-muted: #9ca3af;
+            --bg: #060b19;
+            --card-bg: rgba(13, 22, 47, 0.75);
+            --nav-bg: #0b1528;
             --primary: #45f3ff;
             --secondary: #ec4899;
             --success: #10b981;
             --error: #ef4444;
+            --text: #ffffff;
+            --text-muted: #6b7280;
+            --border: rgba(69, 243, 255, 0.15);
         }
 
         body {
@@ -23,351 +24,239 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow-x: hidden;
             position: relative;
         }
 
         #space-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
         }
 
-        .container {
-            width: 100%;
-            max-width: 540px;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(69, 243, 255, 0.15);
-            border: 1px solid rgba(69, 243, 255, 0.2);
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-
-        .nav-header {
+        /* เมนูด้านบน ถอดแบบจากสกรีนช็อต */
+        .top-navbar {
+            background: var(--nav-bg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            background: rgba(255,255,255,0.05);
-            padding: 10px 15px;
-            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-btn-store {
+            background: #1e293b;
+            border: 2px solid rgba(255,255,255,0.4);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
             font-size: 14px;
         }
 
-        .nav-user {
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .nav-actions button {
-            background: none;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+        .nav-item {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
             cursor: pointer;
-            font-size: 12px;
-            margin-left: 5px;
             transition: 0.2s;
         }
+        .nav-item:hover { color: var(--primary); }
 
-        .nav-actions button:hover {
-            background: white;
-            color: black;
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        h2 {
-            margin-top: 0;
-            color: var(--primary);
-            font-size: 32px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 15px rgba(69, 243, 255, 0.6);
-        }
-
-        .desc {
+        .wallet-badge {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(69, 243, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
             font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 25px;
-            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .wallet-badge span { color: var(--success); font-weight: bold; }
+        .add-money-btn {
+            background: none; border: none; color: var(--primary);
+            cursor: pointer; font-size: 16px; margin-left: 5px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 36px; height: 36px;
+            background: rgba(69, 243, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary);
+            font-weight: bold;
+            border: 1px solid var(--primary);
+        }
+        .user-info { font-size: 12px; text-align: left; }
+        .user-info .name { font-weight: bold; font-size: 14px; color: #fff; }
+        .user-info .logout { color: var(--error); cursor: pointer; text-decoration: underline; }
+
+        /* ส่วนแสดงเนื้อหาหลัก */
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .shop-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .shop-header h1 { font-size: 36px; color: var(--primary); margin: 0; letter-spacing: 2px; text-shadow: 0 0 10px rgba(69, 243, 255, 0.4); }
+        .shop-header p { color: #94a3b8; font-size: 14px; margin-top: 5px; }
+
+        /* การ์ดฟอร์ม/หน้าต่างระบบ */
+        .panel-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(69, 243, 255, 0.05);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .page { display: none; }
         .page.active { display: block; }
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #94a3b8; font-weight: 600; }
         input, select {
-            width: 100%;
-            padding: 14px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 15px;
-            box-sizing: border-box;
-            transition: all 0.3s;
+            width: 100%; padding: 12px 14px; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;
+            color: #fff; font-size: 15px; box-sizing: border-box; transition: 0.2s;
         }
+        input:focus, select:focus { outline: none; border-color: var(--primary); }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(69, 243, 255, 0.3);
+        /* แท็บค่ายมือถือ พร้อมโลโก้ท้ายคำ */
+        .carrier-tabs {
+            display: flex; gap: 10px; margin-bottom: 25px;
         }
+        .carrier-tab {
+            flex: 1; padding: 12px; border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(15, 23, 42, 0.5); color: #fff;
+            border-radius: 8px; cursor: pointer; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; gap: 6px;
+            transition: all 0.2s;
+        }
+        .carrier-tab.active[data-net="AIS"] { border-color: #10b981; background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .carrier-tab.active[data-net="TRUE"] { border-color: #ef4444; background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .carrier-tab.active[data-net="DTAC"] { border-color: #3b82f6; background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
 
-        /* ตกแต่งส่วนหัวข้อแจ้งเตือนสิทธิ์แบบพิเศษ */
-        .badge-notice {
-            font-size: 11px;
-            background: rgba(236, 72, 153, 0.2);
-            color: var(--secondary);
-            border: 1px solid var(--secondary);
-            padding: 3px 8px;
-            border-radius: 5px;
-            margin-left: 10px;
-            display: inline-block;
+        /* สรุปบิลยอดชำระเงิน */
+        .checkout-invoice {
+            background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 15px;
+            margin: 20px 0; text-align: left; border-left: 4px solid var(--secondary);
         }
-
-        .network-selector {
-            display: flex;
-            gap: 10px;
-        }
-
-        .net-btn {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(15, 23, 42, 0.6);
-            color: #fff;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .net-btn:hover { transform: translateY(-2px); }
-        .net-btn.active[data-net="AIS"] { border-color: #10b981; background: rgba(16, 185, 129, 0.2); box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
-        .net-btn.active[data-net="TRUE"] { border-color: #ef4444; background: rgba(239, 68, 68, 0.2); box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
-        .net-btn.active[data-net="DTAC"] { border-color: #3b82f6; background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        .invoice-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; }
+        .invoice-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; color: var(--primary); border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px; margin-top: 5px;}
 
         .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.2); transition: 0.2s;
         }
-        .btn-submit:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 4px 20px rgba(69, 243, 255, 0.5);
-        }
+        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(69, 243, 255, 0.4); }
 
+        /* หน้าต่างแสดงผลลัพธ์ */
         .output-box {
-            margin-top: 25px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px dashed var(--primary);
-            display: none;
+            margin-top: 25px; background: rgba(0,0,0,0.4); padding: 20px;
+            border-radius: 12px; border: 1px dashed var(--primary); display: none;
         }
+        .tabs-output { display: flex; margin-bottom: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 4px; }
+        .tab-out-btn { flex: 1; padding: 8px; background: none; border: none; color: #94a3b8; cursor: pointer; font-weight: bold; border-radius: 6px; }
+        .tab-out-btn.active { background: var(--primary); color: #000; }
+        code { display: block; word-break: break-all; background: #000; padding: 12px; border-radius: 8px; font-size: 12px; text-align: left; max-height: 100px; overflow-y: auto; color: var(--primary); margin-bottom: 10px; }
+        #qrcode { background: white; padding: 10px; border-radius: 8px; width: 200px; height: 200px; margin: 0 auto; display: flex; justify-content: center; }
 
-        .tabs {
-            display: flex;
-            margin-bottom: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 4px;
+        /* แผงหลังบ้านแอดมิน */
+        .admin-section { margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left;}
+        .table-wrapper { overflow-x: auto; margin-top: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th, td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: rgba(255,255,255,0.05); color: var(--primary); }
+
+        /* โครงสร้างหน้าต่าง Pop-up (Modal) ทั้งหมด */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 7, 18, 0.85); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
         }
-
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 6px;
-            transition: 0.2s;
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: #0f172a; border: 2px solid var(--primary);
+            padding: 25px; border-radius: 12px; text-align: center;
+            max-width: 360px; width: 85%; box-shadow: 0 0 25px rgba(69,243,255,0.2);
         }
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-modal-action { flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: #000;
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        code {
-            display: block;
-            word-break: break-all;
-            background: #000;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            text-align: left;
-            max-height: 120px;
-            overflow-y: auto;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #45f3ff;
-        }
-
-        .btn-copy {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .btn-copy:hover { opacity: 0.9; }
-
-        #qrcode {
-            display: flex;
-            justify-content: center;
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 0 auto;
-            width: 200px;
-            height: 200px;
-        }
-        
-        #qrcode img { margin: 0 auto; }
-
-        .admin-table-wrapper {
-            overflow-x: auto;
-            margin-top: 15px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-            text-align: left;
-        }
-
-        th, td {
-            padding: 12px 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        th {
-            background: rgba(255,255,255,0.05);
-            color: var(--primary);
-        }
-
-        .link-toggle {
-            display: inline-block;
-            margin-top: 15px;
-            font-size: 13px;
-            color: var(--secondary);
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .overlay-status {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 7, 18, 0.9);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .overlay-status.active { opacity: 1; pointer-events: auto; }
-
-        .status-box {
-            background: #111827;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 30px rgba(69, 243, 255, 0.3);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 320px;
-            width: 80%;
-        }
-
-        .spinner {
-            width: 50px; height: 50px;
-            border: 5px solid rgba(69, 243, 255, 0.1);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            margin: 0 auto 20px auto;
-            animation: spin 1s linear infinite;
-        }
+        /* ปรับสไตล์สำหรับ UI โหลดและแจ้งเตือน */
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(69,243,255,0.1); border-top: 4px solid var(--primary); border-radius: 50%; margin: 0 auto 15px auto; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .status-title { font-size: 18px; font-weight: bold; letter-spacing: 1px; margin-bottom: 5px; }
-        .status-msg { font-size: 13px; color: var(--text-muted); }
     </style>
 </head>
 <body>
 
 <canvas id="space-canvas"></canvas>
 
-<div class="overlay-status" id="statusOverlay">
-    <div class="status-box">
-        <div class="spinner" id="statusSpinner"></div>
-        <div class="status-title" id="statusTitle">กำลังประมวลผล...</div>
-        <div class="status-msg" id="statusMsg">กรุณารอสักครู่ ระบบกำลังเชื่อมต่อควอนตัม</div>
+<div class="top-navbar" id="globalNav" style="display: none;">
+    <div class="nav-links">
+        <button class="nav-btn-store" onclick="showShopPage()">ร้านค้า</button>
+        <span class="nav-item" onclick="alert('เซิร์ฟเวอร์ทุกตัวทำงานปกติ (100%)')">สถานะเซิร์ฟเวอร์</span>
+        <span class="nav-item" onclick="alert('ระบบเปิดใช้งานแบบไม่จำกัดวัน')">เช็ควันหมดอายุ</span>
+        <span class="nav-item" onclick="window.open('https://fast.com', '_blank')">ทดสอบความเร็ว</span>
+        <span class="nav-item" id="adminMenuLink" style="display:none;" onclick="showAdminPage()">แดชบอร์ดหลังบ้าน</span>
+    </div>
+    <div class="nav-right">
+        <div class="wallet-badge">
+            🪙 ยอดเงิน: <span id="userBalanceDisplay">0</span> ฿
+            <button class="add-money-btn" onclick="openDepositModal()">➕</button>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">P</div>
+            <div class="user-info">
+                <div class="name" id="userNameDisplay">Guest</div>
+                <div class="logout" onclick="triggerLogoutConfirm()">ออกจากระบบ</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container">
-    <div class="nav-header" id="navHeader" style="display: none;">
-        <div>ผู้ใช้: <span class="nav-user" id="currentUserDisplay">Guest</span></div>
-        <div class="nav-actions">
-            <button id="adminBtn" style="display:none;" onclick="showPage('admin-page')">⚙️ หลังบ้าน</button>
-            <button onclick="logout()">ออกจากระบบ</button>
-        </div>
+<div class="main-wrapper">
+    <div class="shop-header">
+        <h1 id="brandTitle">NUMBER SHOP</h1>
+        <p id="brandDesc">ร้านนัมเบอ ช็อป vpnเน็ต</p>
     </div>
 
-    <h2>NUMBER SHOP</h2>
-    <div class="desc">ร้านนัมเบอ ช็อป vpnเน็ต</div>
-
-    <div id="login-page" class="page active">
-        <h3 style="color: var(--secondary);">SIGN IN / เข้าสู่ระบบ</h3>
+    <div id="login-page" class="panel-box page active">
+        <h3 style="color: var(--secondary); margin-top:0;">SIGN IN / เข้าสู่ระบบ</h3>
         <div class="form-group">
             <label>ชื่อผู้ใช้งาน (Username)</label>
             <input type="text" id="login-user" placeholder="ระบุผู้ใช้ของคุณ">
@@ -376,407 +265,420 @@
             <label>รหัสผ่าน (Password)</label>
             <input type="password" id="login-pass" placeholder="ระบุรหัสผ่าน">
         </div>
-        <button class="btn-submit" onclick="login()">🚀 เข้าสู่ระบบพลังควอนตัม</button>
-        <span class="link-toggle" onclick="showPage('register-page')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</span>
+        <button class="btn-submit" onclick="loginProcess()">🚀 เข้าสู่ระบบร้านค้า</button>
+        <p style="font-size:13px; margin-top:15px; color:var(--text-muted);">ยังไม่มีบัญชี? <span style="color:var(--primary); cursor:pointer; text-decoration:underline;" onclick="toggleAuthPage('register-page')">สมัครสมาชิกฟรีที่นี่</span></p>
     </div>
 
-    <div id="register-page" class="page">
-        <h3 style="color: var(--primary);">REGISTER / สมัครสมาชิก</h3>
+    <div id="register-page" class="panel-box page">
+        <h3 style="color: var(--primary); margin-top:0;">REGISTER / สมัครสมาชิก</h3>
         <div class="form-group">
-            <label>ระบุชื่อผู้ใช้งานใหม่</label>
+            <label>ตั้งชื่อผู้ใช้งานใหม่</label>
             <input type="text" id="reg-user" placeholder="ภาษาอังกฤษหรือตัวเลข">
         </div>
         <div class="form-group">
-            <label>ระบุรหัสผ่าน</label>
-            <input type="password" id="reg-pass" placeholder="อย่างน้อย 4 ตัวอักษร">
+            <label>ตั้งรหัสผ่าน</label>
+            <input type="password" id="reg-pass" placeholder="ระบุอย่างน้อย 4 ตัวอักษร">
         </div>
-        <button class="btn-submit" onclick="register()">🌌 ยืนยันการสร้างบัญชี</button>
-        <span class="link-toggle" onclick="showPage('login-page')">มีบัญชีอยู่แล้ว? กลับไปล็อกอิน</span>
+        <button class="btn-submit" onclick="registerProcess()">🌌 ยืนยันการลงทะเบียนบัญชี</button>
+        <p style="font-size:13px; margin-top:15px; color:var(--text-muted);">มีบัญชีอยู่แล้ว? <span style="color:var(--secondary); cursor:pointer; text-decoration:underline;" onclick="toggleAuthPage('login-page')">กลับไปหน้าล็อกอิน</span></p>
     </div>
 
-    <div id="main-page" class="page">
-        <div class="form-group">
-            <label>เลือกเครือข่าย (Network Target)</label>
-            <div class="network-selector">
-                <button class="net-btn active" data-net="AIS" onclick="selectNet('AIS')">AIS</button>
-                <button class="net-btn" data-net="TRUE" onclick="selectNet('TRUE')">TRUE</button>
-                <button class="net-btn" data-net="DTAC" onclick="selectNet('DTAC')">DTAC</button>
-            </div>
+    <div id="main-shop-page" class="panel-box page">
+        <div class="carrier-tabs">
+            <div class="carrier-tab active" data-net="AIS" onclick="changeCarrier('AIS')">AIS 🟢</div>
+            <div class="carrier-tab" data-net="TRUE" onclick="changeCarrier('TRUE')">TRUE 🔴</div>
+            <div class="carrier-tab" data-net="DTAC" onclick="changeCarrier('DTAC')">DTAC 🔵</div>
         </div>
 
         <div class="form-group">
-            <label for="username">ชื่อไฟล์ผู้ใช้งาน (Config Name)</label>
-            <input type="text" id="username" placeholder="เช่น user-space-01" maxlength="15">
+            <label>ระบุชื่อไฟล์กำหนดค่า (Config Name)</label>
+            <input type="text" id="vpnUsername" placeholder="ระบุชื่อภาษาอังกฤษ เช่น phum-net" maxlength="15">
         </div>
 
         <div class="form-group">
-            <label for="duration">ระยะเวลาใช้งานไฟล์ <span id="memberNotice" class="badge-notice" style="display:none;">ล็อกสิทธิ์ทั่วไป</span></label>
-            <select id="duration">
-                <option value="1">1 วัน (ทดสอบระบบ)</option>
-                <option value="3" class="admin-opt">3 วัน</option>
-                <option value="7" class="admin-opt">7 วัน (แนะนำ)</option>
-                <option value="15" class="admin-opt">15 วัน</option>
-                <option value="30" class="admin-opt">30 วัน (พรีเมียม)</option>
+            <label>เลือกแพ็กเกจเวลา (Package Duration)</label>
+            <select id="vpnDuration" onchange="calculateInvoiceCost()">
+                <option value="1">1 วันฟรี (จำกัดวันละ 1 ไฟล์พรีเมียม)</option>
+                <option value="3">3 วัน (13 บาท)</option>
+                <option value="7">7 วัน (25 บาท)</option>
+                <option value="15">15 วัน (35 บาท)</option>
+                <option value="30">30 วัน (45 บาท)</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="devices">ขีดจำกัดอุปกรณ์ที่เชื่อมต่อพร้อมกัน</label>
-            <select id="devices">
-                <option value="1">1 อุปกรณ์</option>
-                <option value="2">2 อุปกรณ์</option>
-                <option value="3">3 อุปกรณ์</option>
+            <label>ขีดจำกัดอุปกรณ์ (หากเลือกเกิน 2 เครื่องขึ้นไป +5 บาท)</label>
+            <select id="vpnDevices" onchange="calculateInvoiceCost()">
+                <option value="1">1 เครื่องเชื่อมต่อพร้อมกัน</option>
+                <option value="2">2 เครื่องเชื่อมต่อพร้อมกัน (+5฿)</option>
+                <option value="3">3 เครื่องเชื่อมต่อพร้อมกัน (+5฿)</option>
             </select>
         </div>
 
-        <button class="btn-submit" onclick="buildV2ray()">⚡ สังเคราะห์ไฟล์พรีเมียม & QR CODE ⚡</button>
+        <div class="checkout-invoice">
+            <div class="invoice-row"><span>ราคาฐานแพ็กเกจ:</span><span id="invBase">0 บาท</span></div>
+            <div class="invoice-row"><span>ค่าบริการเสริมอุปกรณ์:</span><span id="invAddon">0 บาท</span></div>
+            <div class="invoice-total"><span>ยอดเงินที่ต้องชำระสุทธิ:</span><span id="invTotal">0 บาท</span></div>
+        </div>
 
-        <div class="output-box" id="outputBox">
-            <div class="tabs">
-                <button class="tab-btn active" id="btn-file-tab" onclick="switchTab('file-tab')">TEXT CONFIG</button>
-                <button class="tab-btn" id="btn-qr-tab" onclick="switchTab('qr-tab')">QR CODE</button>
+        <button class="btn-submit" onclick="purchaseVpnProcess()">⚡ กดสั่งซื้อและสร้างไฟล์ VPN ⚡</button>
+
+        <div class="output-box" id="shopOutputBox">
+            <div class="tabs-output">
+                <button class="tab-out-btn active" id="tabTxt" onclick="toggleOutTab('txt')">TEXT CONFIG</button>
+                <button class="tab-out-btn" id="tabQr" onclick="toggleOutTab('qr')">QR CODE</button>
             </div>
-
-            <div id="file-tab" class="tab-content active">
-                <code id="v2rayCode"></code>
-                <button class="btn-copy" onclick="copyConfig()">📋 คัดลอกรหัสไฟล์ไปวางในแอป</button>
+            <div id="out-txt-panel">
+                <code id="v2rayTextOutput"></code>
+                <button class="btn-submit" style="background:var(--success); color:#fff;" onclick="copyV2rayCode()">📋 คัดลอกโค้ดเน็ต</button>
             </div>
-
-            <div id="qr-tab" class="tab-content">
+            <div id="out-qr-panel" style="display:none;">
                 <div id="qrcode"></div>
-                <p style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">เปิดแอป V2Box / v2rayNG สแกนใช้งานได้ทันที</p>
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 10px;">เปิดแอป V2Box หรือ v2rayNG แล้วสแกนคิวอาร์</p>
             </div>
         </div>
     </div>
 
-    <div id="admin-page" class="page">
-        <h3 style="color: var(--primary); margin-bottom: 5px;">🪐 หน้าต่างควบคุมหลังบ้าน (Admin Panel)</h3>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom: 15px;">ประวัติการสร้างไฟล์ของลูกค้าและสถิติในระบบทั้งหมด</p>
+    <div id="admin-panel-page" class="panel-box page" style="max-width: 650px;">
+        <h3 style="color: var(--primary); margin-top:0;">⚙️ ระบบจัดการหลังบ้านแอดมิน</h3>
         
-        <div class="admin-table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ผู้สร้าง</th>
-                        <th>ชื่อไฟล์ที่ถูกสร้าง</th>
-                        <th>ค่าย</th>
-                        <th>วันใช้งาน</th>
-                        <th>เวลาที่สร้าง</th>
-                    </tr>
-                </thead>
-                <tbody id="adminLogTable">
-                </tbody>
-            </table>
+        <div class="admin-section">
+            <h4 style="color:var(--secondary); margin:0 0 10px 0;">🔧 ตั้งค่าข้อมูลรับเงิน (เติมเงินเข้าคลัง)</h4>
+            <div class="form-group">
+                <label>เบอร์รับเงิน TrueWallet (ซองอั่งเปา)</label>
+                <input type="text" id="admWalletNum" placeholder="ระบุเบอร์โทรศัพท์ร้าน">
+            </div>
+            <div class="form-group">
+                <label>ข้อมูลบัญชีธนาคาร (ชื่อ/เลขบัญชี สำหรับให้ลูกค้าโอนสแกน)</label>
+                <input type="text" id="admBankDetails" placeholder="เช่น กสิกรไทย 123-4-56789-0 ร้านนัมเบอช็อป">
+            </div>
+            <button class="btn-submit" style="padding:8px;" onclick="saveAdminSettings()">💾 บันทึกข้อมูลระบบรับเงิน</button>
         </div>
-        <button class="btn-submit" style="background:#4b5563; color:#fff; margin-top:15px;" onclick="showPage('main-page')">⬅️ กลับหน้าสร้างไฟล์</button>
-    </div>
 
+        <div class="admin-section">
+            <h4 style="color:var(--primary); margin:15px 0 5px 0;">👥 รายชื่อผู้ใช้งาน & ยอดเงินบัญชีทั้งหมดในระบบ</h4>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>ชื่อผู้ใช้</th><th>รหัสผ่าน</th><th>ระดับสิทธิ์</th><th>ยอดเงิน (บาท)</th></tr>
+                    </thead>
+                    <tbody id="adminUserTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn-submit" style="background:#475569; color:#fff; margin-top:20px;" onclick="showShopPage()">⬅️ กลับหน้าหลักร้านค้า</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="statusModal">
+    <div class="modal-box">
+        <div class="spinner" id="statusSpinner"></div>
+        <h3 id="statusTitle" style="margin:0 0 10px 0;">กำลังประมวลผล...</h3>
+        <p id="statusMsg" style="margin:0; font-size:13px; color:#94a3b8;"></p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="logoutConfirmModal">
+    <div class="modal-box" style="border-color: var(--error);">
+        <h3 style="color: var(--error); margin-top:0;">ออกจากระบบ?</h3>
+        <p style="color: #cbd5e1; font-size: 14px;">คุณแน่ใจหรือไม่ว่าต้องการออกจากเซสชันร้านค้านี้</p>
+        <div class="modal-btns">
+            <button class="btn-modal-action" style="background: var(--error); color: #fff;" onclick="executeLogout()">ยืนยัน</button>
+            <button class="btn-modal-action" style="background: #475569; color: #fff;" onclick="closeLogoutModal()">ย้อนกลับ</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="depositModal">
+    <div class="modal-box" style="max-width: 400px; text-align: left;">
+        <h3 style="color: var(--success); margin-top:0; text-align: center;">💰 ช่องทางเติมเครดิตเข้ากระเป๋า</h3>
+        
+        <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; margin-bottom:15px; font-size:13px;">
+            <strong>🏦 โอนเงินผ่านธนาคาร:</strong> <br>
+            <span id="depBankText">กำลังโหลดข้อมูลร้าน...</span>
+        </div>
+
+        <div class="form-group">
+            <label>🧧 วางลิงก์ซองของขวัญ / ซองอั่งเปา TrueWallet</label>
+            <input type="text" id="depWalletLink" placeholder="https://gift.truemoney.com/... (ระบบสุ่มเติมเข้ากระเป๋า)">
+        </div>
+
+        <div class="modal-btns">
+            <button class="btn-modal-action" style="background: var(--success); color: #000;" onclick="submitDepositLink()">ส่งลิงก์เติมเงิน</button>
+            <button class="btn-modal-action" style="background: #475569; color: #fff;" onclick="closeDepositModal()">ปิดหน้าต่าง</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // ================= ระบบภาพเคลื่อนไหวพื้นหลัง =================
+    // ================= ระบบอนิเมชันกราฟิกอวกาศ =================
     const canvas = document.getElementById('space-canvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    for(let i=0; i<100; i++) {
-        stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 2,
-            speed: Math.random() * 0.5 + 0.1
-        });
-    }
-
-    function animateSpace() {
-        ctx.fillStyle = '#030712';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+    for(let i=0; i<80; i++) { stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2, speed: Math.random() * 0.4 + 0.1 }); }
+    function animate() {
+        ctx.fillStyle = '#060b19'; ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#ffffff';
-        stars.forEach(star => {
-            ctx.beginPath();
-            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-            ctx.fill();
-            star.y += star.speed;
-            if(star.y > canvas.height) {
-                star.y = 0;
-                star.x = Math.random() * canvas.width;
-            }
-        });
-        let gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, canvas.width);
-        gradient.addColorStop(0, 'rgba(69, 243, 255, 0.03)');
-        gradient.addColorStop(0.5, 'rgba(236, 72, 153, 0.02)');
-        gradient.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        requestAnimationFrame(animateSpace);
+        stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill(); s.y += s.speed; if(s.y > canvas.height) { s.y = 0; s.x = Math.random()*canvas.width; } });
+        requestAnimationFrame(animate);
     }
-    animateSpace();
+    animate();
 
-    // ================= ระบบโครงสร้างฐานข้อมูลผู้ใช้และจำลองสิทธิ์ =================
-    if(!localStorage.getItem('usersDB')) {
-        const defaultUsers = [
-            {username: 'admin', password: '123', role: 'admin'},
-            {username: 'user01', password: '123', role: 'member'}
+    // ================= ระบบ Core ข้อมูลหลังบ้านของแผงควบคุม =================
+    if(!localStorage.getItem('shopUsersDB')) {
+        const initialUsers = [
+            {username: 'admin', password: '123', role: 'admin', balance: 99999},
+            {username: 'phum', password: '123', role: 'member', balance: 50}
         ];
-        localStorage.setItem('usersDB', JSON.stringify(defaultUsers));
+        localStorage.setItem('shopUsersDB', JSON.stringify(initialUsers));
     }
-    if(!localStorage.getItem('vpnLogsDB')) {
-        localStorage.setItem('vpnLogsDB', JSON.stringify([]));
+    if(!localStorage.getItem('shopLogsDB')) localStorage.setItem('shopLogsDB', JSON.stringify([]));
+    if(!localStorage.getItem('shopConfigSettings')) {
+        localStorage.setItem('shopConfigSettings', JSON.stringify({ walletNum: '088-888-8888', bankDetails: 'ธนาคารกสิกรไทย เลขที่ 999-9-99999-9 ร้าน NUMBER SHOP VPN' }));
     }
 
-    let sessionUser = null;
-    let selectedNetwork = "AIS";
+    let activeUser = null;
+    let selectedCarrier = "AIS";
 
-    function showStatus(title, msg, type = 'load') {
-        const overlay = document.getElementById('statusOverlay');
-        const box = overlay.querySelector('.status-box');
+    // จัดการระบบแจ้งเตือนผ่านกล่อง Modals
+    function triggerNotice(title, text, type = 'load') {
+        const modal = document.getElementById('statusModal');
         const spinner = document.getElementById('statusSpinner');
-        
         document.getElementById('statusTitle').innerText = title;
-        document.getElementById('statusMsg').innerText = msg;
+        document.getElementById('statusMsg').innerText = text;
         
-        if (type === 'load') {
-            spinner.style.display = 'block';
-            box.style.borderColor = 'var(--primary)';
-            document.getElementById('statusTitle').style.color = 'var(--primary)';
-        } else if (type === 'success') {
-            spinner.style.display = 'none';
-            box.style.borderColor = 'var(--success)';
-            document.getElementById('statusTitle').style.color = 'var(--success)';
-        } else if (type === 'error') {
-            spinner.style.display = 'none';
-            box.style.borderColor = 'var(--error)';
-            document.getElementById('statusTitle').style.color = 'var(--error)';
-        }
-        overlay.classList.add('active');
+        if(type === 'load') { spinner.style.display = 'block'; }
+        else { spinner.style.display = 'none'; }
+        modal.classList.add('active');
     }
+    function removeNotice() { document.getElementById('statusModal').classList.remove('active'); }
 
-    function hideStatus() {
-        document.getElementById('statusOverlay').classList.remove('active');
-    }
-
-    function showPage(pageId) {
+    function toggleAuthPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
-        if(pageId === 'admin-page') { loadAdminLogs(); }
     }
 
-    function register() {
+    // ฟังก์ชันจัดการสมัครสมาชิก
+    function registerProcess() {
         const u = document.getElementById('reg-user').value.trim();
         const p = document.getElementById('reg-pass').value.trim();
+        if(!u || p.length < 4) { triggerNotice('ล้มเหลว', 'กรุณากรอกข้อมูลและรหัสผ่านยาว 4 ตัวขึ้นไป', 'error'); setTimeout(removeNotice, 2000); return; }
         
-        if(!u || p.length < 4) { 
-            showStatus('เกิดข้อผิดพลาด', 'กรุณากรอกข้อมูลผู้ใช้ และรหัสผ่าน 4 ตัวขึ้นไปครับ', 'error');
-            setTimeout(hideStatus, 2000);
-            return; 
-        }
-        
-        let users = JSON.parse(localStorage.getItem('usersDB'));
-        if(users.some(user => user.username.toLowerCase() === u.toLowerCase())) {
-            showStatus('ล้มเหลว', 'ชื่อผู้ใช้งานนี้ถูกใช้ไปแล้วในระบบอวกาศ!', 'error');
-            setTimeout(hideStatus, 2000);
-            return;
-        }
+        let users = JSON.parse(localStorage.getItem('shopUsersDB'));
+        if(users.some(x => x.username.toLowerCase() === u.toLowerCase())) { triggerNotice('ล้มเหลว', 'มีบัญชีชื่อผู้ใช้งานนี้อยู่ในระบบแล้ว', 'error'); setTimeout(removeNotice, 2000); return; }
 
-        showStatus('กำลังบันทึกข้อมูล...', 'กำลังซิงค์โปรไฟล์เข้าสู่เครือข่าย Quantum', 'load');
-
+        triggerNotice('กำลังประมวลผล', 'กำลังลงทะเบียนข้อมูลผู้ใช้เข้าคลังระบบ...', 'load');
         setTimeout(() => {
-            users.push({username: u, password: p, role: 'member'});
-            localStorage.setItem('usersDB', JSON.stringify(users));
-            showStatus('สมัครสมาชิกสำเร็จ!', 'ระบบพาท่านไปยังหน้าเข้าสู่ระบบแล้ว', 'success');
-            
-            setTimeout(() => {
-                hideStatus();
-                document.getElementById('reg-user').value = '';
-                document.getElementById('reg-pass').value = '';
-                showPage('login-page');
-            }, 1500);
-        }, 1500);
+            users.push({username: u, password: p, role: 'member', balance: 0});
+            localStorage.setItem('shopUsersDB', JSON.stringify(users));
+            triggerNotice('สำเร็จ!', 'สมัครสมาชิกเรียบร้อยแล้ว ยินดีต้อนรับสู่ระบบ', 'success');
+            setTimeout(() => { removeNotice(); toggleAuthPage('login-page'); }, 1500);
+        }, 1200);
     }
 
-    function login() {
+    // ฟังก์ชันจัดการเข้าสู่ระบบ
+    function loginProcess() {
         const u = document.getElementById('login-user').value.trim();
         const p = document.getElementById('login-pass').value.trim();
-        let users = JSON.parse(localStorage.getItem('usersDB'));
-        
-        let found = users.find(user => user.username === u && user.password === p);
-        
-        showStatus('กำลังยืนยันตัวตน...', 'กำลังตรวจสอบกุญแจความปลอดภัยส่วนบุคคล', 'load');
+        let users = JSON.parse(localStorage.getItem('shopUsersDB'));
+        let target = users.find(x => x.username === u && x.password === p);
 
+        triggerNotice('กำลังตรวจสอบความปลอดภัย', 'กำลังค้นหาบัญชีและตรวจสอบสิทธิ์การใช้งาน...', 'load');
         setTimeout(() => {
-            if(found) {
-                sessionUser = found;
-                document.getElementById('currentUserDisplay').innerText = found.username;
-                document.getElementById('navHeader').style.display = 'flex';
+            if(target) {
+                activeUser = target;
+                document.getElementById('userNameDisplay').innerText = target.username;
+                document.getElementById('userBalanceDisplay').innerText = target.balance;
+                document.getElementById('globalNav').style.display = 'flex';
                 
-                // คัดกรองและควบคุมการจำกัดสิทธิ์ UI ของผู้ใช้งานทั่วไป
-                const durationSelect = document.getElementById('duration');
-                const memberNotice = document.getElementById('memberNotice');
-                
-                if(found.role === 'admin') {
-                    document.getElementById('adminBtn').style.display = 'inline-block';
-                    memberNotice.style.display = 'none';
-                    // เปิดให้แอดมินเลือกได้ทุกวันตัวเลือก
-                    document.querySelectorAll('.admin-opt').forEach(opt => opt.disabled = false);
-                } else {
-                    document.getElementById('adminBtn').style.display = 'none';
-                    memberNotice.style.display = 'inline-block';
-                    // ล็อกค่าผู้ใช้ทั่วไปให้สร้างได้เฉพาะ 1 วัน
-                    durationSelect.value = "1";
-                    document.querySelectorAll('.admin-opt').forEach(opt => opt.disabled = true);
-                }
-                
-                showStatus('เข้าสู่ระบบสำเร็จ!', 'ยินดีต้อนรับเข้าสู่แผงควบคุมหลัก', 'success');
-                
-                setTimeout(() => {
-                    hideStatus();
-                    document.getElementById('login-user').value = '';
-                    document.getElementById('login-pass').value = '';
-                    showPage('main-page');
-                }, 1500);
+                if(target.role === 'admin') { document.getElementById('adminMenuLink').style.display = 'block'; }
+                else { document.getElementById('adminMenuLink').style.display = 'none'; }
+
+                triggerNotice('ยินดีต้อนรับ!', 'เข้าสู่ระบบเครือข่ายสำเร็จแล้ว', 'success');
+                setTimeout(() => { removeNotice(); showShopPage(); }, 1200);
             } else {
-                showStatus('เข้าสู่ระบบล้มเหลว', 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้องครับ', 'error');
-                setTimeout(hideStatus, 2000);
+                triggerNotice('ล้มเหลว', 'ชื่อผู้ใช้งานหรือรหัสผ่านผิดพลาด กรุณาลองอีกครั้งครับ', 'error');
+                setTimeout(removeNotice, 2000);
             }
-        }, 1500);
+        }, 1200);
     }
 
-    function logout() {
-        sessionUser = null;
-        document.getElementById('navHeader').style.display = 'none';
-        showPage('login-page');
-        document.getElementById('outputBox').style.display = 'none';
+    // ระบบแจ้งเตือนออกจากระบบตามสเปก
+    function triggerLogoutConfirm() { document.getElementById('logoutConfirmModal').classList.add('active'); }
+    function closeLogoutModal() { document.getElementById('logoutConfirmModal').classList.remove('active'); }
+    function executeLogout() {
+        activeUser = null;
+        closeLogoutModal();
+        document.getElementById('globalNav').style.display = 'none';
+        document.getElementById('shopOutputBox').style.display = 'none';
+        toggleAuthPage('login-page');
     }
 
-    function selectNet(net) {
-        selectedNetwork = net;
-        document.querySelectorAll('.net-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`.net-btn[data-net="${net}"]`).classList.add('active');
+    // ส่วนหน้าควบคุมเมนูร้านค้า
+    function showShopPage() {
+        toggleAuthPage('main-shop-page');
+        calculateInvoiceCost();
     }
 
-    function switchTab(tabId) {
-        document.getElementById('btn-file-tab').classList.toggle('active', tabId === 'file-tab');
-        document.getElementById('btn-qr-tab').classList.toggle('active', tabId === 'qr-tab');
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
+    function changeCarrier(carrierName) {
+        selectedCarrier = carrierName;
+        document.querySelectorAll('.carrier-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.carrier-tab[data-net="${carrierName}"]`).classList.add('active');
+        calculateInvoiceCost();
     }
 
-    // ================= ฟังก์ชันสร้างไฟล์พร้อมระบบตรวจเช็คโควต้าวันละ 1 ไฟล์ =================
-    function buildV2ray() {
-        const username = document.getElementById('username').value.trim();
-        const duration = document.getElementById('duration').value;
-        const devices = document.getElementById('devices').value;
-        const bugHost = "numbershop.com"; 
+    // ฟังก์ชันการคำนวณเงินจริง (ตามที่ระบุในบรีฟ)
+    function calculateInvoiceCost() {
+        const days = document.getElementById('vpnDuration').value;
+        const devices = document.getElementById('vpnDevices').value;
+        
+        let basePrice = 0;
+        if(days === "1") basePrice = 0;
+        else if(days === "3") basePrice = 13;
+        else if(days === "7") basePrice = 25;
+        else if(days === "15") basePrice = 35;
+        else if(days === "30") basePrice = 45;
 
-        if (!username) {
-            showStatus('คำเตือน', 'กรุณากรอกชื่อไฟล์ก่อนครับ', 'error');
-            setTimeout(hideStatus, 2000);
-            return;
-        }
+        // หากใช้อุปกรณ์เกิน 2 เครื่องขึ้นไป บวกเงิน 5 บาทเพิ่ม
+        let addonPrice = (parseInt(devices) >= 2) ? 5 : 0;
+        let totalPrice = basePrice + addonPrice;
 
-        // --- ระบบเช็คสิทธิ์โควต้าความปลอดภัย ---
-        let logs = JSON.parse(localStorage.getItem('vpnLogsDB')) || [];
-        const todayDateStr = new Date().toLocaleDateString(); // ดึงวันที่วันนี้มาตรวจสอบ
+        document.getElementById('invBase').innerText = basePrice + " บาท";
+        document.getElementById('invAddon').innerText = addonPrice + " บาท";
+        document.getElementById('invTotal').innerText = totalPrice + " บาท";
+        return totalPrice;
+    }
 
-        if (sessionUser && sessionUser.role !== 'admin') {
-            // ค้นหาประวัติว่ายูสเซอร์นี้เคยสร้างไฟล์ใน "วันนี้" ไปแล้วหรือยัง
-            const hasCreatedToday = logs.some(log => log.creator === sessionUser.username && log.dateOnly === todayDateStr);
-            
-            if (hasCreatedToday) {
-                showStatus('โควต้าเต็ม!', 'บัญชีของคุณจำกัดสิทธิ์สร้างไฟล์ได้วันละ 1 ไฟล์เท่านั้นครับ', 'error');
-                setTimeout(hideStatus, 3000);
+    // ฟังก์ชันสำหรับการสร้างไฟล์และหักเงินออกจากระบบจริง
+    function purchaseVpnProcess() {
+        const name = document.getElementById('vpnUsername').value.trim();
+        const days = document.getElementById('vpnDuration').value;
+        const totalCost = calculateInvoiceCost();
+
+        if(!name) { triggerNotice('แจ้งเตือน', 'กรุณาระบุชื่อคอนฟิกไฟล์ของคุณก่อนครับ', 'error'); setTimeout(removeNotice, 2000); return; }
+
+        let logs = JSON.parse(localStorage.getItem('shopLogsDB')) || [];
+        const todayStr = new Date().toLocaleDateString();
+
+        // เช็คเงื่อนไขโควต้าความปลอดภัยสำหรับแบบ 1 วันฟรีทั่วไป
+        if (days === "1" && activeUser.role !== 'admin') {
+            const usedFreeToday = logs.some(l => l.creator === activeUser.username && l.dateOnly === todayStr && l.duration === "1 วัน");
+            if(usedFreeToday) {
+                triggerNotice('โควต้าเต็ม!', 'สิทธิ์สร้างไฟล์ฟรี 1 วันจำกัดแค่วันละ 1 ไฟล์พรีเมียมเท่านั้นครับ', 'error');
+                setTimeout(removeNotice, 3000);
                 return;
             }
         }
 
-        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-
-        const configName = `NUMBER-SHOP-[${selectedNetwork}]-${username}-${duration}Days`;
-
-        const vmessJson = {
-            "v": "2", "ps": configName, "add": "th-premium.numbershop.com", "port": "443",
-            "id": uuid, "aid": "0", "scy": "auto", "net": "ws", "type": "none",
-            "host": bugHost, "path": "/v2ray-free", "tls": "tls", "sni": bugHost
-        };
-
-        const base64Config = btoa(unescape(encodeURIComponent(JSON.stringify(vmessJson))));
-        const finalString = "vmess://" + base64Config;
-
-        document.getElementById('v2rayCode').innerText = finalString;
-        document.getElementById('qrcode').innerHTML = "";
-        
-        try {
-            if (typeof QRCode !== 'undefined') {
-                new QRCode(document.getElementById('qrcode'), {
-                    text: finalString, width: 200, height: 200,
-                    colorDark : "#000000", colorLight : "#ffffff",
-                    correctLevel : QRCode.CorrectLevel.L
-                });
-            } else {
-                document.getElementById('qrcode').innerHTML = `<p style="color:red; font-size:12px; padding:20px;">สคริปต์คิวอาร์โค้ดขัดข้องชั่วคราว<br>กรุณาใช้ Text Config แทน</p>`;
-            }
-        } catch (err) {
-            document.getElementById('qrcode').innerHTML = `<p style="color:red; font-size:12px; padding:20px;">ไม่สามารถเรนเดอร์รูปภาพได้</p>`;
-        }
-
-        document.getElementById('outputBox').style.display = 'block';
-        switchTab('file-tab');
-
-        // บันทึกประวัติและตัวแปรวันที่ใช้ตรวจสอบล็อกสิทธิ์ลงในระบบ DB ล็อกไว้
-        const now = new Date();
-        logs.unshift({
-            creator: sessionUser ? sessionUser.username : 'Unknown',
-            configName: configName,
-            network: selectedNetwork,
-            duration: duration + ' วัน',
-            time: now.toLocaleTimeString() + ' ' + now.toLocaleDateString(),
-            dateOnly: todayDateStr // คีย์ลับสำหรับนำมาเช็คจำนวนต่อวัน
-        });
-        localStorage.setItem('vpnLogsDB', JSON.stringify(logs));
-        
-        showStatus('สร้างสำเร็จ!', 'สังเคราะห์ไฟล์เน็ตสำเร็จแล้ว', 'success');
-        setTimeout(hideStatus, 1500);
-    }
-
-    function copyConfig() {
-        const text = document.getElementById('v2rayCode').innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            showStatus('สำเร็จ', 'คัดลอกไฟล์เน็ตไปยังคลิปบอร์ดสำเร็จแล้ว!', 'success');
-            setTimeout(hideStatus, 1500);
-        });
-    }
-
-    function loadAdminLogs() {
-        const logs = JSON.parse(localStorage.getItem('vpnLogsDB'));
-        const tbody = document.getElementById('adminLogTable');
-        tbody.innerHTML = '';
-        
-        if(logs.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">ยังไม่มีประวัติการสร้างไฟล์ในระบบ</td></tr>`;
+        // คัดกรองหักยอดเงินในเครดิตสำหรับแพ็กเกจเสียเงิน
+        if(activeUser.role !== 'admin' && activeUser.balance < totalCost) {
+            triggerNotice('เงินคงเหลือไม่พอ!', 'กรุณากดเติมเงินที่เครื่องหมาย (+) ด้านบนแถบเมนูก่อนชำระเงินครับ', 'error');
+            setTimeout(removeNotice, 3000);
             return;
         }
 
-        logs.forEach(log => {
+        triggerNotice('กำลังประมวลผลบิล', 'กำลังตัดยอดบัญชีเครดิตและสังเคราะห์ความเร็วคู่สาย...', 'load');
+
+        setTimeout(() => {
+            // อัปเดตเงินใน LocalStorage จริง
+            if(activeUser.role !== 'admin') {
+                let users = JSON.parse(localStorage.getItem('shopUsersDB'));
+                let uIndex = users.findIndex(x => x.username === activeUser.username);
+                users[uIndex].balance -= totalCost;
+                activeUser.balance = users[uIndex].balance;
+                localStorage.setItem('shopUsersDB', JSON.stringify(users));
+                document.getElementById('userBalanceDisplay').innerText = activeUser.balance;
+            }
+
+            // ระบบประกอบชุดโค้ด V2ray VMESS
+            const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8); return v.toString(16);
+            });
+            const confName = `NUMBER-SHOP-[${selectedCarrier}]-${name}-${days}Days`;
+            const jsonBody = { "v": "2", "ps": confName, "add": "th-premium.numbershop.com", "port": "443", "id": uuid, "aid": "0", "scy": "auto", "net": "ws", "type": "none", "host": "numbershop.com", "path": "/v2ray", "tls": "tls", "sni": "numbershop.com" };
+            const finalVmess = "vmess://" + btoa(unescape(encodeURIComponent(JSON.stringify(jsonBody))));
+
+            document.getElementById('v2rayTextOutput').innerText = finalVmess;
+            document.getElementById('qrcode').innerHTML = "";
+            try { new QRCode(document.getElementById('qrcode'), { text: finalVmess, width: 200, height: 200 }); } catch(e){}
+
+            document.getElementById('shopOutputBox').style.display = 'block';
+            toggleOutTab('txt');
+
+            // ลงข้อมูลลงบันทึก LOG DB ระบบ
+            logs.unshift({ creator: activeUser.username, configName: confName, carrier: selectedCarrier, duration: days + ' วัน', dateOnly: todayStr });
+            localStorage.setItem('shopLogsDB', JSON.stringify(logs));
+
+            triggerNotice('ชำระเงินสำเร็จ!', 'ระบบเปิดช่องสัญญาณพรีเมียมพร้อมคิวอาร์โค้ดแล้ว', 'success');
+            setTimeout(removeNotice, 1500);
+        }, 1500);
+    }
+
+    function toggleOutTab(type) {
+        document.getElementById('tabTxt').classList.toggle('active', type === 'txt');
+        document.getElementById('tabQr').classList.toggle('active', type === 'qr');
+        document.getElementById('out-txt-panel').style.display = (type === 'txt') ? 'block' : 'none';
+        document.getElementById('out-qr-panel').style.display = (type === 'qr') ? 'block' : 'none';
+    }
+
+    function copyV2rayCode() {
+        navigator.clipboard.writeText(document.getElementById('v2rayTextOutput').innerText).then(() => {
+            alert('คัดลอกไฟล์ VPN ไปยังคลิปบอร์ดสำเร็จแล้วครับ!');
+        });
+    }
+
+    // ฟังก์ชันเปิด/ปิดเมนูเติมเงิน
+    function openDepositModal() {
+        const settings = JSON.parse(localStorage.getItem('shopConfigSettings'));
+        document.getElementById('depBankText').innerText = settings.bankDetails;
+        document.getElementById('depositModal').classList.add('active');
+    }
+    function closeDepositModal() { document.getElementById('depositModal').classList.remove('active'); }
+    function submitDepositLink() {
+        const link = document.getElementById('depWalletLink').value.trim();
+        if(!link.includes('truemoney.com')) { alert('กรุณาระบุลิงก์ซองอั่งเปา TrueWallet ที่ถูกต้องครับ!'); return; }
+        
+        // สุ่มเงินรางวัลแถมให้ลูกค้าระบบจำลอง
+        let luckyMoney = Math.floor(Math.random() * 50) + 20; 
+        
+        let users = JSON.parse(localStorage.getItem('shopUsersDB'));
+        let uIndex = users.findIndex(x => x.username === activeUser.username);
+        users[uIndex].balance += luckyMoney;
+        activeUser.balance = users[uIndex].balance;
+        localStorage.setItem('shopUsersDB', JSON.stringify(users));
+        document.getElementById('userBalanceDisplay').innerText = activeUser.balance;
+
+        alert(`ระบบตรวจสอบซองอั่งเปาสำเร็จ! คุณได้รับเงินจำนวน ${luckyMoney} บาท เข้าบัญชีแล้ว`);
+        document.getElementById('depWalletLink').value = '';
+        closeDepositModal();
+    }
+
+    // ================= โซนควบคุมหน้างานของระบบหลังบ้านแอดมิน =================
+    function showAdminPage() {
+        toggleAuthPage('admin-panel-page');
+        const settings = JSON.parse(localStorage.getItem('shopConfigSettings'));
+        document.getElementById('admWalletNum').value = settings.walletNum;
+        document.getElementById('admBankDetails').value = settings.bankDetails;
+
+        // ดึงรายชื่อบัญชีลูกค้ามาโชว์ในตารางแอดมินตามบรีฟ
+        const users = JSON.parse(localStorage.getItem('shopUsersDB'));
+        const tbody = document.getElementById('adminUserTableBody');
+        tbody.innerHTML = '';
+        users.forEach(u => {
             let row = document.createElement('tr');
-            row.innerHTML = `
-                <td style="color:var(--secondary); font-weight:bold;">${log.creator}</td>
-                <td style="word-break:break-all;">${log.configName}</td>
-                <td><span style="padding:2px 6px; border-radius:4px; background:rgba(255,255,255,0.1); font-weight:bold;">${log.network}</span></td>
-                <td>${log.duration}</td>
-                <td style="color:var(--text-muted);">${log.time}</td>
-            `;
+            row.innerHTML = `<td><strong>${u.username}</strong></td><td>${u.password}</td><td>${u.role}</td><td style="color:var(--success); font-weight:bold;">${u.balance} ฿</td>`;
             tbody.appendChild(row);
         });
+    }
+
+    function saveAdminSettings() {
+        const wallet = document.getElementById('admWalletNum').value.trim();
+        const bank = document.getElementById('admBankDetails').value.trim();
+        localStorage.setItem('shopConfigSettings', JSON.stringify({ walletNum: wallet, bankDetails: bank }));
+        alert('บันทึกการตั้งค่าระบบรับเงินและช่องทางโอนเรียบร้อยแล้ว!');
     }
 </script>
 </body>
