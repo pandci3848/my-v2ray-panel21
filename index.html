@@ -168,4 +168,575 @@
             color: #000;
             border: none;
             border-radius: 10px;
-            font-size: 16px
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 4px 20px rgba(69, 243, 255, 0.5);
+        }
+
+        .output-box {
+            margin-top: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px dashed var(--primary);
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        code {
+            display: block;
+            word-break: break-all;
+            background: #000;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            text-align: left;
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #45f3ff;
+        }
+
+        .btn-copy {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-copy:hover { opacity: 0.9; }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+
+        .admin-table-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        th {
+            background: rgba(255,255,255,0.05);
+            color: var(--primary);
+        }
+
+        .link-toggle {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 13px;
+            color: var(--secondary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Styles สำหรับแจ้งเตือนสถานะแบบใหม่ */
+        .overlay-status {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 7, 18, 0.9);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .overlay-status.active { opacity: 1; pointer-events: auto; }
+
+        .status-box {
+            background: #111827;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 30px rgba(69, 243, 255, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 320px;
+            width: 80%;
+        }
+
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid rgba(69, 243, 255, 0.1);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .status-title { font-size: 18px; font-weight: bold; letter-spacing: 1px; margin-bottom: 5px; }
+        .status-msg { font-size: 13px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+<canvas id="space-canvas"></canvas>
+
+<div class="overlay-status" id="statusOverlay">
+    <div class="status-box">
+        <div class="spinner" id="statusSpinner"></div>
+        <div class="status-title" id="statusTitle">กำลังประมวลผล...</div>
+        <div class="status-msg" id="statusMsg">กรุณารอสักครู่ ระบบกำลังเชื่อมต่อควอนตัม</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="nav-header" id="navHeader" style="display: none;">
+        <div>ผู้ใช้: <span class="nav-user" id="currentUserDisplay">Guest</span></div>
+        <div class="nav-actions">
+            <button id="adminBtn" style="display:none;" onclick="showPage('admin-page')">⚙️ หลังบ้าน</button>
+            <button onclick="logout()">ออกจากระบบ</button>
+        </div>
+    </div>
+
+    <h2>Thai V2ray Space Panel</h2>
+    <div class="desc">เซิร์ฟเวอร์ความเร็วสูง • ระบบประมวลผล Cloud Quantum</div>
+
+    <div id="login-page" class="page active">
+        <h3 style="color: var(--secondary);">SIGN IN / เข้าสู่ระบบ</h3>
+        <div class="form-group">
+            <label>ชื่อผู้ใช้งาน (Username)</label>
+            <input type="text" id="login-user" placeholder="ระบุผู้ใช้ของคุณ">
+        </div>
+        <div class="form-group">
+            <label>รหัสผ่าน (Password)</label>
+            <input type="password" id="login-pass" placeholder="ระบุรหัสผ่าน">
+        </div>
+        <button class="btn-submit" onclick="login()">🚀 เข้าสู่ระบบพลังควันตัม</button>
+        <span class="link-toggle" onclick="showPage('register-page')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</span>
+    </div>
+
+    <div id="register-page" class="page">
+        <h3 style="color: var(--primary);">REGISTER / สมัครสมาชิก</h3>
+        <div class="form-group">
+            <label>ระบุชื่อผู้ใช้งานใหม่</label>
+            <input type="text" id="reg-user" placeholder="ภาษาอังกฤษหรือตัวเลข">
+        </div>
+        <div class="form-group">
+            <label>ระบุรหัสผ่าน</label>
+            <input type="password" id="reg-pass" placeholder="อย่างน้อย 4 ตัวอักษร">
+        </div>
+        <button class="btn-submit" onclick="register()">🌌 ยืนยันการสร้างบัญชี</button>
+        <span class="link-toggle" onclick="showPage('login-page')">มีบัญชีอยู่แล้ว? กลับไปล็อกอิน</span>
+    </div>
+
+    <div id="main-page" class="page">
+        <div class="form-group">
+            <label>เลือกเครือข่าย (Network Target)</label>
+            <div class="network-selector">
+                <button class="net-btn active" data-net="AIS" onclick="selectNet('AIS')">AIS</button>
+                <button class="net-btn" data-net="TRUE" onclick="selectNet('TRUE')">TRUE</button>
+                <button class="net-btn" data-net="DTAC" onclick="selectNet('DTAC')">DTAC</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="username">ชื่อไฟล์ผู้ใช้งาน (Config Name)</label>
+            <input type="text" id="username" placeholder="เช่น user-space-01" maxlength="15">
+        </div>
+
+        <div class="form-group">
+            <label for="duration">ระยะเวลาใช้งานไฟล์</label>
+            <select id="duration">
+                <option value="1">1 วัน (ทดสอบระบบ)</option>
+                <option value="3">3 วัน</option>
+                <option value="7">7 วัน (แนะนำ)</option>
+                <option value="15">15 วัน</option>
+                <option value="30">30 วัน (พรีเมียม)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="devices">ขีดจำกัดอุปกรณ์ที่เชื่อมต่อพร้อมกัน</label>
+            <select id="devices">
+                <option value="1">1 อุปกรณ์</option>
+                <option value="2">2 อุปกรณ์</option>
+                <option value="3">3 อุปกรณ์</option>
+            </select>
+        </div>
+
+        <button class="btn-submit" onclick="buildV2ray()">⚡ สังเคราะห์ไฟล์พรีเมียม & QR CODE ⚡</button>
+
+        <div class="output-box" id="outputBox">
+            <div class="tabs">
+                <button class="tab-btn active" id="btn-file-tab" onclick="switchTab('file-tab')">TEXT CONFIG</button>
+                <button class="tab-btn" id="btn-qr-tab" onclick="switchTab('qr-tab')">QR CODE</button>
+            </div>
+
+            <div id="file-tab" class="tab-content active">
+                <code id="v2rayCode"></code>
+                <button class="btn-copy" onclick="copyConfig()">📋 คัดลอกรหัสไฟล์ไปวางในแอป</button>
+            </div>
+
+            <div id="qr-tab" class="tab-content">
+                <div id="qrcode"></div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">เปิดแอป V2Box / v2rayNG สแกนใช้งานได้ทันที</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-page" class="page">
+        <h3 style="color: var(--primary); margin-bottom: 5px;">🪐 หน้าต่างควบคุมหลังบ้าน (Admin Panel)</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom: 15px;">ประวัติการสร้างไฟล์ของลูกค้าและสถิติในระบบทั้งหมด</p>
+        
+        <div class="admin-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ผู้สร้าง</th>
+                        <th>ชื่อไฟล์ที่ถูกสร้าง</th>
+                        <th>ค่าย</th>
+                        <th>วันใช้งาน</th>
+                        <th>เวลาที่สร้าง</th>
+                    </tr>
+                </thead>
+                <tbody id="adminLogTable">
+                </tbody>
+            </table>
+        </div>
+        <button class="btn-submit" style="background:#4b5563; color:#fff; margin-top:15px;" onclick="showPage('main-page')">⬅️ กลับหน้าสร้างไฟล์</button>
+    </div>
+
+</div>
+
+<script>
+    // ================= ระบบภาพเคลื่อนไหวอวกาศขยับได้ =================
+    const canvas = document.getElementById('space-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for(let i=0; i<100; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            speed: Math.random() * 0.5 + 0.1
+        });
+    }
+
+    function animateSpace() {
+        ctx.fillStyle = '#030712';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#ffffff';
+        stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fill();
+            star.y += star.speed;
+            if(star.y > canvas.height) {
+                star.y = 0;
+                star.x = Math.random() * canvas.width;
+            }
+        });
+
+        let gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, canvas.width);
+        gradient.addColorStop(0, 'rgba(69, 243, 255, 0.03)');
+        gradient.addColorStop(0.5, 'rgba(236, 72, 153, 0.02)');
+        gradient.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        requestAnimationFrame(animateSpace);
+    }
+    animateSpace();
+
+
+    // ================= ระบบฐานข้อมูลจำลองและเซสชันผู้ใช้ =================
+    if(!localStorage.getItem('usersDB')) {
+        const defaultUsers = [
+            {username: 'admin', password: '123', role: 'admin'},
+            {username: 'user01', password: '123', role: 'member'}
+        ];
+        localStorage.setItem('usersDB', JSON.stringify(defaultUsers));
+    }
+    if(!localStorage.getItem('vpnLogsDB')) {
+        localStorage.setItem('vpnLogsDB', JSON.stringify([]));
+    }
+
+    let sessionUser = null;
+    let selectedNetwork = "AIS";
+    let qrcodeInstance = null;
+
+    // ฟังก์ชันเปิดการแสดงสถานะแจ้งเตือน Popup UI
+    function showStatus(title, msg, type = 'load') {
+        const overlay = document.getElementById('statusOverlay');
+        const box = overlay.querySelector('.status-box');
+        const spinner = document.getElementById('statusSpinner');
+        
+        document.getElementById('statusTitle').innerText = title;
+        document.getElementById('statusMsg').innerText = msg;
+        
+        if (type === 'load') {
+            spinner.style.display = 'block';
+            box.style.borderColor = 'var(--primary)';
+            document.getElementById('statusTitle').style.color = 'var(--primary)';
+        } else if (type === 'success') {
+            spinner.style.display = 'none';
+            box.style.borderColor = 'var(--success)';
+            document.getElementById('statusTitle').style.color = 'var(--success)';
+        } else if (type === 'error') {
+            spinner.style.display = 'none';
+            box.style.borderColor = 'var(--error)';
+            document.getElementById('statusTitle').style.color = 'var(--error)';
+        }
+        
+        overlay.classList.add('active');
+    }
+
+    function hideStatus() {
+        document.getElementById('statusOverlay').classList.remove('active');
+    }
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        if(pageId === 'admin-page') { loadAdminLogs(); }
+    }
+
+    // ฟังก์ชันสำหรับการลงทะเบียนสมัครสมาชิก
+    function register() {
+        const u = document.getElementById('reg-user').value.trim();
+        const p = document.getElementById('reg-pass').value.trim();
+        
+        if(!u || p.length < 4) { 
+            showStatus('เกิดข้อผิดพลาด', 'กรุณากรอกข้อมูลผู้ใช้ และรหัสผ่าน 4 ตัวขึ้นไปครับ', 'error');
+            setTimeout(hideStatus, 2000);
+            return; 
+        }
+        
+        let users = JSON.parse(localStorage.getItem('usersDB'));
+        if(users.some(user => user.username.toLowerCase() === u.toLowerCase())) {
+            showStatus('ล้มเหลว', 'ชื่อผู้ใช้งานนี้ถูกใช้ไปแล้วในระบบอวกาศ!', 'error');
+            setTimeout(hideStatus, 2000);
+            return;
+        }
+
+        showStatus('กำลังบันทึกข้อมูล...', 'กำลังซิงค์โปรไฟล์เข้าสู่เครือข่าย Quantum', 'load');
+
+        setTimeout(() => {
+            users.push({username: u, password: p, role: 'member'});
+            localStorage.setItem('usersDB', JSON.stringify(users));
+            
+            showStatus('สมัครสมาชิกสำเร็จ!', 'ระบบพาท่านไปยังหน้าเข้าสู่ระบบแล้ว', 'success');
+            
+            setTimeout(() => {
+                hideStatus();
+                document.getElementById('reg-user').value = '';
+                document.getElementById('reg-pass').value = '';
+                showPage('login-page');
+            }, 1500);
+
+        }, 1500);
+    }
+
+    // ฟังก์ชันเข้าสู่ระบบ
+    function login() {
+        const u = document.getElementById('login-user').value.trim();
+        const p = document.getElementById('login-pass').value.trim();
+        let users = JSON.parse(localStorage.getItem('usersDB'));
+        
+        let found = users.find(user => user.username === u && user.password === p);
+        
+        showStatus('กำลังยืนยันตัวตน...', 'กำลังตรวจสอบกุญแจความปลอดภัยส่วนบุคคล', 'load');
+
+        setTimeout(() => {
+            if(found) {
+                sessionUser = found;
+                document.getElementById('currentUserDisplay').innerText = found.username;
+                document.getElementById('navHeader').style.display = 'flex';
+                
+                if(found.role === 'admin') {
+                    document.getElementById('adminBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('adminBtn').style.display = 'none';
+                }
+                
+                showStatus('เข้าสู่ระบบสำเร็จ!', 'ยินดีต้อนรับเข้าสู่แผงควบคุมหลัก', 'success');
+                
+                setTimeout(() => {
+                    hideStatus();
+                    document.getElementById('login-user').value = '';
+                    document.getElementById('login-pass').value = '';
+                    showPage('main-page');
+                }, 1500);
+
+            } else {
+                showStatus('เข้าสู่ระบบล้มเหลว', 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้องครับ', 'error');
+                setTimeout(hideStatus, 2000);
+            }
+        }, 1500);
+    }
+
+    function logout() {
+        sessionUser = null;
+        document.getElementById('navHeader').style.display = 'none';
+        showPage('login-page');
+        document.getElementById('outputBox').style.display = 'none';
+    }
+
+    // ================= ระบบปรับเลือกค่ายมือถือและฟังก์ชันใช้งานทั่วไป =================
+    function selectNet(net) {
+        selectedNetwork = net;
+        document.querySelectorAll('.net-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.net-btn[data-net="${net}"]`).classList.add('active');
+    }
+
+    function switchTab(tabId) {
+        document.getElementById('btn-file-tab').classList.toggle('active', tabId === 'file-tab');
+        document.getElementById('btn-qr-tab').classList.toggle('active', tabId === 'qr-tab');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    function buildV2ray() {
+        const username = document.getElementById('username').value.trim();
+        const duration = document.getElementById('duration').value;
+        const devices = document.getElementById('devices').value;
+        const bugHost = "numbershop.com"; 
+
+        if (!username) {
+            showStatus('คำเตือน', 'กรุณากรอกชื่อไฟล์ก่อนครับ', 'error');
+            setTimeout(hideStatus, 2000);
+            return;
+        }
+
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+
+        const configName = `TH-[${selectedNetwork}]-${username}-${duration}Days-[${devices}Device]`;
+
+        const vmessJson = {
+            "v": "2", "ps": configName, "add": "th-premium.numbershop.com", "port": "443",
+            "id": uuid, "aid": "0", "scy": "auto", "net": "ws", "type": "none",
+            "host": bugHost, "path": "/v2ray-free", "tls": "tls", "sni": bugHost
+        };
+
+        const base64Config = btoa(unescape(encodeURIComponent(JSON.stringify(vmessJson))));
+        const finalString = "vmess://" + base64Config;
+
+        document.getElementById('v2rayCode').innerText = finalString;
+
+        document.getElementById('qrcode').innerHTML = "";
+        qrcodeInstance = new QRCode(document.getElementById('qrcode'), {
+            text: finalString, width: 200, height: 200,
+            colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.L
+        });
+
+        document.getElementById('outputBox').style.display = 'block';
+        switchTab('file-tab');
+
+        let logs = JSON.parse(localStorage.getItem('vpnLogsDB'));
+        const now = new Date();
+        logs.unshift({
+            creator: sessionUser ? sessionUser.username : 'Unknown',
+            configName: configName,
+            network: selectedNetwork,
+            duration: duration + ' วัน',
+            time: now.toLocaleTimeString() + ' ' + now.toLocaleDateString()
+        });
+        localStorage.setItem('vpnLogsDB', JSON.stringify(logs));
+    }
+
+    function copyConfig() {
+        const text = document.getElementById('v2rayCode').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            showStatus('สำเร็จ', 'คัดลอกไฟล์เน็ตไปยังคลิปบอร์ดสำเร็จแล้ว!', 'success');
+            setTimeout(hideStatus, 1500);
+        });
+    }
+
+    function loadAdminLogs() {
+        const logs = JSON.parse(localStorage.getItem('vpnLogsDB'));
+        const tbody = document.getElementById('adminLogTable');
+        tbody.innerHTML = '';
+        
+        if(logs.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">ยังไม่มีประวัติการสร้างไฟล์ในระบบ</td></tr>`;
+            return;
+        }
+
+        logs.forEach(log => {
+            let row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="color:var(--secondary); font-weight:bold;">${log.creator}</td>
+                <td style="word-break:break-all;">${log.configName}</td>
+                <td><span style="padding:2px 6px; border-radius:4px; background:rgba(255,255,255,0.1); font-weight:bold;">${log.network}</span></td>
+                <td>${log.duration}</td>
+                <td style="color:var(--text-muted);">${log.time}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+</script>
+</body>
+</html>
