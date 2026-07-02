@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TH-VPN CONFIG GENERATOR (PRO)</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>NUMBER SHOP - VPN PANEL</title>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
     <style>
         :root {
             --bg: #030712;
@@ -94,16 +94,17 @@
         h2 {
             margin-top: 0;
             color: var(--primary);
-            font-size: 28px;
+            font-size: 32px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-shadow: 0 0 15px rgba(69, 243, 255, 0.6);
         }
 
         .desc {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-muted);
             margin-bottom: 25px;
+            letter-spacing: 1px;
         }
 
         .page { display: none; }
@@ -138,6 +139,18 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 10px rgba(69, 243, 255, 0.3);
+        }
+
+        /* ตกแต่งส่วนหัวข้อแจ้งเตือนสิทธิ์แบบพิเศษ */
+        .badge-notice {
+            font-size: 11px;
+            background: rgba(236, 72, 153, 0.2);
+            color: var(--secondary);
+            border: 1px solid var(--secondary);
+            padding: 3px 8px;
+            border-radius: 5px;
+            margin-left: 10px;
+            display: inline-block;
         }
 
         .network-selector {
@@ -255,6 +268,8 @@
             width: 200px;
             height: 200px;
         }
+        
+        #qrcode img { margin: 0 auto; }
 
         .admin-table-wrapper {
             overflow-x: auto;
@@ -289,7 +304,6 @@
             text-decoration: underline;
         }
 
-        /* Styles สำหรับแจ้งเตือนสถานะแบบใหม่ */
         .overlay-status {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -349,8 +363,8 @@
         </div>
     </div>
 
-    <h2>Thai V2ray Space Panel</h2>
-    <div class="desc">เซิร์ฟเวอร์ความเร็วสูง • ระบบประมวลผล Cloud Quantum</div>
+    <h2>NUMBER SHOP</h2>
+    <div class="desc">ร้านนัมเบอ ช็อป vpnเน็ต</div>
 
     <div id="login-page" class="page active">
         <h3 style="color: var(--secondary);">SIGN IN / เข้าสู่ระบบ</h3>
@@ -362,7 +376,7 @@
             <label>รหัสผ่าน (Password)</label>
             <input type="password" id="login-pass" placeholder="ระบุรหัสผ่าน">
         </div>
-        <button class="btn-submit" onclick="login()">🚀 เข้าสู่ระบบพลังควันตัม</button>
+        <button class="btn-submit" onclick="login()">🚀 เข้าสู่ระบบพลังควอนตัม</button>
         <span class="link-toggle" onclick="showPage('register-page')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</span>
     </div>
 
@@ -396,13 +410,13 @@
         </div>
 
         <div class="form-group">
-            <label for="duration">ระยะเวลาใช้งานไฟล์</label>
+            <label for="duration">ระยะเวลาใช้งานไฟล์ <span id="memberNotice" class="badge-notice" style="display:none;">ล็อกสิทธิ์ทั่วไป</span></label>
             <select id="duration">
                 <option value="1">1 วัน (ทดสอบระบบ)</option>
-                <option value="3">3 วัน</option>
-                <option value="7">7 วัน (แนะนำ)</option>
-                <option value="15">15 วัน</option>
-                <option value="30">30 วัน (พรีเมียม)</option>
+                <option value="3" class="admin-opt">3 วัน</option>
+                <option value="7" class="admin-opt">7 วัน (แนะนำ)</option>
+                <option value="15" class="admin-opt">15 วัน</option>
+                <option value="30" class="admin-opt">30 วัน (พรีเมียม)</option>
             </select>
         </div>
 
@@ -460,7 +474,7 @@
 </div>
 
 <script>
-    // ================= ระบบภาพเคลื่อนไหวอวกาศขยับได้ =================
+    // ================= ระบบภาพเคลื่อนไหวพื้นหลัง =================
     const canvas = document.getElementById('space-canvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -484,7 +498,6 @@
     function animateSpace() {
         ctx.fillStyle = '#030712';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
         ctx.fillStyle = '#ffffff';
         stars.forEach(star => {
             ctx.beginPath();
@@ -496,20 +509,17 @@
                 star.x = Math.random() * canvas.width;
             }
         });
-
         let gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, canvas.width);
         gradient.addColorStop(0, 'rgba(69, 243, 255, 0.03)');
         gradient.addColorStop(0.5, 'rgba(236, 72, 153, 0.02)');
         gradient.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         requestAnimationFrame(animateSpace);
     }
     animateSpace();
 
-
-    // ================= ระบบฐานข้อมูลจำลองและเซสชันผู้ใช้ =================
+    // ================= ระบบโครงสร้างฐานข้อมูลผู้ใช้และจำลองสิทธิ์ =================
     if(!localStorage.getItem('usersDB')) {
         const defaultUsers = [
             {username: 'admin', password: '123', role: 'admin'},
@@ -523,9 +533,7 @@
 
     let sessionUser = null;
     let selectedNetwork = "AIS";
-    let qrcodeInstance = null;
 
-    // ฟังก์ชันเปิดการแสดงสถานะแจ้งเตือน Popup UI
     function showStatus(title, msg, type = 'load') {
         const overlay = document.getElementById('statusOverlay');
         const box = overlay.querySelector('.status-box');
@@ -547,7 +555,6 @@
             box.style.borderColor = 'var(--error)';
             document.getElementById('statusTitle').style.color = 'var(--error)';
         }
-        
         overlay.classList.add('active');
     }
 
@@ -561,7 +568,6 @@
         if(pageId === 'admin-page') { loadAdminLogs(); }
     }
 
-    // ฟังก์ชันสำหรับการลงทะเบียนสมัครสมาชิก
     function register() {
         const u = document.getElementById('reg-user').value.trim();
         const p = document.getElementById('reg-pass').value.trim();
@@ -584,7 +590,6 @@
         setTimeout(() => {
             users.push({username: u, password: p, role: 'member'});
             localStorage.setItem('usersDB', JSON.stringify(users));
-            
             showStatus('สมัครสมาชิกสำเร็จ!', 'ระบบพาท่านไปยังหน้าเข้าสู่ระบบแล้ว', 'success');
             
             setTimeout(() => {
@@ -593,11 +598,9 @@
                 document.getElementById('reg-pass').value = '';
                 showPage('login-page');
             }, 1500);
-
         }, 1500);
     }
 
-    // ฟังก์ชันเข้าสู่ระบบ
     function login() {
         const u = document.getElementById('login-user').value.trim();
         const p = document.getElementById('login-pass').value.trim();
@@ -613,10 +616,21 @@
                 document.getElementById('currentUserDisplay').innerText = found.username;
                 document.getElementById('navHeader').style.display = 'flex';
                 
+                // คัดกรองและควบคุมการจำกัดสิทธิ์ UI ของผู้ใช้งานทั่วไป
+                const durationSelect = document.getElementById('duration');
+                const memberNotice = document.getElementById('memberNotice');
+                
                 if(found.role === 'admin') {
                     document.getElementById('adminBtn').style.display = 'inline-block';
+                    memberNotice.style.display = 'none';
+                    // เปิดให้แอดมินเลือกได้ทุกวันตัวเลือก
+                    document.querySelectorAll('.admin-opt').forEach(opt => opt.disabled = false);
                 } else {
                     document.getElementById('adminBtn').style.display = 'none';
+                    memberNotice.style.display = 'inline-block';
+                    // ล็อกค่าผู้ใช้ทั่วไปให้สร้างได้เฉพาะ 1 วัน
+                    durationSelect.value = "1";
+                    document.querySelectorAll('.admin-opt').forEach(opt => opt.disabled = true);
                 }
                 
                 showStatus('เข้าสู่ระบบสำเร็จ!', 'ยินดีต้อนรับเข้าสู่แผงควบคุมหลัก', 'success');
@@ -627,7 +641,6 @@
                     document.getElementById('login-pass').value = '';
                     showPage('main-page');
                 }, 1500);
-
             } else {
                 showStatus('เข้าสู่ระบบล้มเหลว', 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้องครับ', 'error');
                 setTimeout(hideStatus, 2000);
@@ -642,7 +655,6 @@
         document.getElementById('outputBox').style.display = 'none';
     }
 
-    // ================= ระบบปรับเลือกค่ายมือถือและฟังก์ชันใช้งานทั่วไป =================
     function selectNet(net) {
         selectedNetwork = net;
         document.querySelectorAll('.net-btn').forEach(btn => btn.classList.remove('active'));
@@ -656,6 +668,7 @@
         document.getElementById(tabId).classList.add('active');
     }
 
+    // ================= ฟังก์ชันสร้างไฟล์พร้อมระบบตรวจเช็คโควต้าวันละ 1 ไฟล์ =================
     function buildV2ray() {
         const username = document.getElementById('username').value.trim();
         const duration = document.getElementById('duration').value;
@@ -668,12 +681,27 @@
             return;
         }
 
+        // --- ระบบเช็คสิทธิ์โควต้าความปลอดภัย ---
+        let logs = JSON.parse(localStorage.getItem('vpnLogsDB')) || [];
+        const todayDateStr = new Date().toLocaleDateString(); // ดึงวันที่วันนี้มาตรวจสอบ
+
+        if (sessionUser && sessionUser.role !== 'admin') {
+            // ค้นหาประวัติว่ายูสเซอร์นี้เคยสร้างไฟล์ใน "วันนี้" ไปแล้วหรือยัง
+            const hasCreatedToday = logs.some(log => log.creator === sessionUser.username && log.dateOnly === todayDateStr);
+            
+            if (hasCreatedToday) {
+                showStatus('โควต้าเต็ม!', 'บัญชีของคุณจำกัดสิทธิ์สร้างไฟล์ได้วันละ 1 ไฟล์เท่านั้นครับ', 'error');
+                setTimeout(hideStatus, 3000);
+                return;
+            }
+        }
+
         const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
 
-        const configName = `TH-[${selectedNetwork}]-${username}-${duration}Days-[${devices}Device]`;
+        const configName = `NUMBER-SHOP-[${selectedNetwork}]-${username}-${duration}Days`;
 
         const vmessJson = {
             "v": "2", "ps": configName, "add": "th-premium.numbershop.com", "port": "443",
@@ -685,26 +713,39 @@
         const finalString = "vmess://" + base64Config;
 
         document.getElementById('v2rayCode').innerText = finalString;
-
         document.getElementById('qrcode').innerHTML = "";
-        qrcodeInstance = new QRCode(document.getElementById('qrcode'), {
-            text: finalString, width: 200, height: 200,
-            colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.L
-        });
+        
+        try {
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(document.getElementById('qrcode'), {
+                    text: finalString, width: 200, height: 200,
+                    colorDark : "#000000", colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.L
+                });
+            } else {
+                document.getElementById('qrcode').innerHTML = `<p style="color:red; font-size:12px; padding:20px;">สคริปต์คิวอาร์โค้ดขัดข้องชั่วคราว<br>กรุณาใช้ Text Config แทน</p>`;
+            }
+        } catch (err) {
+            document.getElementById('qrcode').innerHTML = `<p style="color:red; font-size:12px; padding:20px;">ไม่สามารถเรนเดอร์รูปภาพได้</p>`;
+        }
 
         document.getElementById('outputBox').style.display = 'block';
         switchTab('file-tab');
 
-        let logs = JSON.parse(localStorage.getItem('vpnLogsDB'));
+        // บันทึกประวัติและตัวแปรวันที่ใช้ตรวจสอบล็อกสิทธิ์ลงในระบบ DB ล็อกไว้
         const now = new Date();
         logs.unshift({
             creator: sessionUser ? sessionUser.username : 'Unknown',
             configName: configName,
             network: selectedNetwork,
             duration: duration + ' วัน',
-            time: now.toLocaleTimeString() + ' ' + now.toLocaleDateString()
+            time: now.toLocaleTimeString() + ' ' + now.toLocaleDateString(),
+            dateOnly: todayDateStr // คีย์ลับสำหรับนำมาเช็คจำนวนต่อวัน
         });
         localStorage.setItem('vpnLogsDB', JSON.stringify(logs));
+        
+        showStatus('สร้างสำเร็จ!', 'สังเคราะห์ไฟล์เน็ตสำเร็จแล้ว', 'success');
+        setTimeout(hideStatus, 1500);
     }
 
     function copyConfig() {
