@@ -34,7 +34,7 @@
             z-index: -1; pointer-events: none;
         }
 
-        /* ส่วนหัวแถบเมนูด้านบน */
+        /* เมนูด้านบน */
         .top-navbar {
             background: var(--nav-bg);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -96,7 +96,6 @@
         }
         input:focus, select:focus { outline: none; border-color: var(--primary); }
 
-        /* การ์ดเลือกค่ายเครือข่ายมือถือ */
         .carrier-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
         .carrier-tab {
             flex: 1; padding: 12px; border: 1px solid rgba(255,255,255,0.08);
@@ -121,32 +120,36 @@
         }
         .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(69, 243, 255, 0.4); }
 
-        .output-box { margin-top: 25px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 12px; border: 1px dashed var(--primary); }
-        .tabs-output { display: flex; margin-bottom: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 4px; }
-        .tab-out-btn { flex: 1; padding: 8px; background: none; border: none; color: #94a3b8; cursor: pointer; font-weight: bold; border-radius: 6px; }
-        .tab-out-btn.active { background: var(--primary); color: #000; }
-        
-        code { display: block; word-break: break-all; background: #000; padding: 12px; border-radius: 8px; font-size: 12px; text-align: left; max-height: 100px; overflow-y: auto; color: var(--primary); margin-bottom: 10px; }
-        .qrcode-container { background: #fff; padding: 12px; border-radius: 8px; width: 200px; height: 200px; margin: 0 auto; display: block; }
+        /* ส่วนจัดวางคิวอาร์โค้ดแบบฝังรูปภาพโลโก้ */
+        .qrcode-wrapper-box {
+            position: relative; width: 200px; height: 200px; margin: 0 auto; background: #fff; padding: 10px; border-radius: 12px;
+        }
+        #qrcodeCanvas canvas { width: 100% !important; height: 100% !important; display: block; }
+        .qr-logo-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 44px; height: 44px; background: #060b19; border: 2px solid var(--primary);
+            border-radius: 8px; padding: 2px; display: flex; justify-content: center; align-items: center;
+        }
+        .qr-logo-overlay img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
 
-        /* ระบบเมนูแบ่งหน้าเติมเงินแบบใหม่ 2 ช่องทาง */
+        /* สลับช่องทางเงิน */
         .deposit-channels { display: flex; gap: 10px; margin-bottom: 15px; }
         .channel-btn { flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
         .channel-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
         .deposit-panel { display: none; }
         .deposit-panel.active { display: block; }
 
-        /* บานหน้าต่างแอดมิน */
-        .admin-section { margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
+        /* แผงหลังบ้าน */
+        .admin-section { margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; text-align: left; }
         .table-wrapper { overflow-x: auto; margin-top: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
         th, td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         th { background: rgba(255,255,255,0.05); color: var(--primary); }
 
         .btn-action-sm { padding: 4px 8px; border: none; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; color:#fff; }
-        .input-credit-sm { width: 50px; padding: 4px; background:#000; border:1px solid #444; color:#fff; font-size:11px; text-align:center; border-radius:4px; }
+        .input-credit-sm { width: 55px; padding: 4px; background:#000; border:1px solid #444; color:#fff; font-size:11px; text-align:center; border-radius:4px; }
 
-        /* ป๊อปอัพ & โมดอลวงกลมจับเวลาแบบนับถอยหลัง */
+        /* โมดอลจับเวลาวงกลม */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(3, 7, 18, 0.9); z-index: 9999;
@@ -160,20 +163,14 @@
             max-width: 360px; width: 85%; box-shadow: 0 0 25px rgba(69,243,255,0.2);
         }
         
-        /* สไตล์ชุดเอฟเฟกต์นับถอยหลังวงกลมวิ่งรอบตัวเลข */
-        .countdown-container {
-            position: relative; width: 80px; height: 80px; margin: 0 auto 15px auto;
-        }
+        .countdown-container { position: relative; width: 80px; height: 80px; margin: 0 auto 15px auto; }
         .countdown-svg { width: 80px; height: 80px; transform: rotate(-90deg); }
         .countdown-circle {
             fill: none; stroke: var(--primary); stroke-width: 5;
             stroke-dasharray: 220; stroke-dashoffset: 0;
             transition: stroke-dashoffset 1s linear;
         }
-        .countdown-text {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 26px; font-weight: bold; color: #fff;
-        }
+        .countdown-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 26px; font-weight: bold; color: #fff; }
 
         .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
         .btn-modal-action { flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
@@ -186,8 +183,9 @@
 <div class="top-navbar" id="globalNav" style="display: none;">
     <div class="nav-links">
         <button class="nav-btn-store" onclick="showShopPage()">ร้านค้า</button>
+        <span class="nav-item" onclick="showHistoryPage()">📦 ประวัติการสั่งซื้อ</span>
         <span class="nav-item" onclick="window.open('https://fast.com', '_blank')">ทดสอบความเร็ว</span>
-        <span class="nav-item" id="adminMenuLink" style="display:none;" onclick="showAdminPage()">แดชบอร์ดหลังบ้าน</span>
+        <span class="nav-item" id="adminMenuLink" style="display:none; color: var(--secondary); font-weight: bold;" onclick="showAdminPage()">⚙️ ระบบควบคุมหลังบ้าน</span>
     </div>
     <div class="nav-right">
         <div class="wallet-badge">
@@ -207,7 +205,7 @@
 <div class="main-wrapper">
     <div class="shop-header">
         <h1>NUMBER SHOP</h1>
-        <p>ร้านนัมเบอ ช็อป vpnเน็ต</p>
+        <p>ระบบจัดการสังเคราะห์และจำหน่าย VPN คอนฟิกพรีเมียม</p>
     </div>
 
     <div id="login-page" class="panel-box page active">
@@ -254,10 +252,10 @@
             <label>เลือกแพ็กเกจวันใช้งาน</label>
             <select id="vpnDuration" onchange="calculateInvoiceCost()">
                 <option value="1">1 วันฟรี (โควต้าวันละ 1 ไฟล์พรีเมียม)</option>
-                <option value="3">3 วัน (13 บาท)</option>
+                <option value="3">3 วัน (15 บาท)</option>
                 <option value="7">7 วัน (25 บาท)</option>
                 <option value="15">15 วัน (35 บาท)</option>
-                <option value="30">30 วัน (45 บาท)</option>
+                <option value="30">30 วัน (50 บาท)</option>
             </select>
         </div>
 
@@ -276,35 +274,45 @@
             <div class="invoice-total"><span>ยอดรวมสุทธิที่ต้องจ่าย:</span><span id="invTotal">0 บาท</span></div>
         </div>
 
-        <button class="btn-submit" onclick="purchaseVpnProcess()">⚡ สั่งซื้อและสังเคราะห์รหัส VPN ⚡</button>
-
-        <div class="output-box" id="shopOutputBox" style="display:none;">
-            <div class="tabs-output">
-                <button class="tab-out-btn active" id="tabTxt" onclick="toggleOutTab('txt')">TEXT CONFIG</button>
-                <button class="tab-out-btn" id="tabQr" onclick="toggleOutTab('qr')">QR CODE</button>
-            </div>
-            <div id="out-txt-panel">
-                <code id="v2rayTextOutput"></code>
-                <button class="btn-submit" style="background:var(--success); color:#fff;" onclick="copyV2rayCode()">📋 คัดลอกข้อความรหัสไฟล์</button>
-            </div>
-            <div id="out-qr-panel" style="display:none;">
-                <div class="qrcode-container">
-                    <div id="qrcodeCanvas"></div>
-                </div>
-                <p style="font-size: 11px; color: #94a3b8; margin-top: 10px; text-align:center;">บันทึกรูปภาพหรือใช้แอป V2Box/v2rayNG สแกน</p>
-            </div>
-        </div>
+        <button class="btn-submit" onclick="purchaseVpnProcess()">⚡ สั่งซื้อและสร้างไฟล์ VPN ⚡</button>
     </div>
 
-    <div id="admin-panel-page" class="panel-box page" style="max-width: 750px;">
-        <h3 style="color: var(--primary); margin-top:0;">⚙️ ระบบแดชบอร์ดควบคุมส่วนกลาง (Admin Only)</h3>
+    <div id="history-page" class="panel-box page" style="max-width: 650px;">
+        <h3 style="color: var(--primary); margin-top:0;">📦 ประวัติการซื้อและไฟล์ VPN ของคุณ</h3>
+        
+        <div id="userLatestOutput" style="display:none; margin-bottom:20px; background:rgba(69, 243, 255, 0.1); padding:15px; border-radius:10px; border:1px dashed var(--primary);">
+            <h4 style="margin:0 0 10px 0; color:var(--primary);">🔥 ลิงก์ไฟล์ล่าสุดที่คุณเพิ่งซื้อ:</h4>
+            <code id="v2rayTextOutput" style="background:#000; padding:10px; border-radius:6px; display:block; word-break:break-all; font-size:11px; margin-bottom:10px; color:#45f3ff;"></code>
+            
+            <div class="qrcode-wrapper-box">
+                <div id="qrcodeCanvas"></div>
+                <div class="qr-logo-overlay">
+                    <img src="https://i.imgur.com/8mdtWjB.png" alt="Logo" onerror="this.src='https://placedog.net/100/100'">
+                </div>
+            </div>
+            <button class="btn-submit" style="background:var(--success); color:#fff; margin-top:15px; padding:8px;" onclick="copyV2rayCode()">📋 คัดลอก Text ไปใช้งาน</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>ชื่อคอนฟิก</th><th>ค่าย</th><th>วันใช้งาน</th><th>สถานะอุปกรณ์</th></tr>
+                </thead>
+                <tbody id="userHistoryTableBody"></tbody>
+            </table>
+        </div>
+        <button class="btn-submit" style="background:#475569; color:#fff; margin-top:20px;" onclick="showShopPage()">⬅️ กลับหน้าสั่งซื้อสินค้า</button>
+    </div>
+
+    <div id="admin-panel-page" class="panel-box page" style="max-width: 800px;">
+        <h2 style="color: var(--primary); margin-top:0; text-align:center;">⚙️ ระบบจัดการหลังบ้านส่วนกลาง (Admin Dashboard)</h2>
         
         <div class="admin-section">
-            <h4 style="color:var(--secondary); margin:0 0 5px 0;">👥 ฐานข้อมูลบัญชีผู้ใช้และระบบเติมเครดิตด้วยมือ</h4>
+            <h3 style="color:var(--secondary); margin:0 0 8px 0;">1️⃣ ระบบฐานข้อมูล & จัดการเพิ่ม-ลดเครดิตผู้ใช้งาน</h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>ชื่อบัญชี</th><th>รหัสผ่าน</th><th>ระดับ</th><th>ยอดเงินคงเหลือ</th><th>เพิ่มเครดิตเงินเข้าระบบ</th></tr>
+                        <tr><th>ชื่อบัญชี</th><th>รหัสผ่าน</th><th>สิทธิ์</th><th>ยอดเงิน</th><th>ปรับยอดเครดิตในระบบ</th></tr>
                     </thead>
                     <tbody id="adminUserTableBody"></tbody>
                 </table>
@@ -312,18 +320,33 @@
         </div>
 
         <div class="admin-section">
-            <h4 style="color:var(--primary); margin:15px 0 5px 0;">📊 รายการประวัติไฟล์และจำกัดอุปกรณ์จริงบนระบบ</h4>
+            <h3 style="color:var(--primary); margin:20px 0 8px 0;">2️⃣ ระบบตั้งค่าช่องทางรับเงิน (อัปเดตระบบอัตโนมัติ)</h3>
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; border:1px solid var(--border);">
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label>เบอร์โทรศัพท์สำหรับรับซองอั่งเปา TrueMoney Wallet</label>
+                    <input type="text" id="adminSettingWalletPhone" value="088-765-4321">
+                </div>
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label>ระบุหมายเลขบัญชีธนาคารและชื่อบัญชี</label>
+                    <input type="text" id="adminSettingBankInfo" value="ธนาคารกสิกรไทย เลขที่ 099-1-23456-7 (บจก. นัมเบอ ช็อป)">
+                </div>
+                <button class="btn-submit" style="background:var(--primary); color:#000; padding:10px;" onclick="saveSystemPaymentSettings()">💾 บันทึกการตั้งค่ารับเงิน</button>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h3 style="color:#e2e8f0; margin:20px 0 8px 0;">📊 รายการประวัติสร้างไฟล์ระบายสัญญาณบนเซิร์ฟเวอร์</h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>ผู้สร้าง</th><th>ชื่อไฟล์ระบบ</th><th>ค่าย</th><th>อุปกรณ์ใช้งาน</th><th>จัดการไฟล์</th></tr>
+                        <tr><th>แอดมิน/ผู้ซื้อ</th><th>ชื่อไฟล์ระบบ</th><th>ค่าย</th><th>สิทธิ์คุมอุปกรณ์</th><th>คำสั่งควบคุม</th></tr>
                     </thead>
                     <tbody id="adminLogsTableBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <button class="btn-submit" style="background:#475569; color:#fff; margin-top:20px;" onclick="showShopPage()">⬅️ กลับหน้าหลักคลังร้านค้า</button>
+        <button class="btn-submit" style="background:#475569; color:#fff; margin-top:25px;" onclick="showShopPage()">⬅️ กลับหน้าหลักคลังร้านค้า</button>
     </div>
 </div>
 
@@ -331,7 +354,7 @@
     <div class="modal-box" style="border-color: var(--error);">
         <h1 style="color: var(--error); margin:0; font-size:48px;">❌</h1>
         <h3 style="color: #fff; margin:10px 0 5px 0;">ข้อมูลผิดพลาด</h3>
-        <p style="color: #94a3b8; font-size: 13px;">ลิงก์ซองของขวัญไม่ถูกต้องหรือถูกใช้งานไปแล้ว</p>
+        <p style="color: #94a3b8; font-size: 13px;">ลิงก์ซองของขวัญไม่ถูกต้อง โหลดซ้ำ หรือกรอกรูปแบบข้อมูลผิดพลาด</p>
         <button class="btn-submit" style="background:#475569; color:#fff; margin-top:10px; padding:8px;" onclick="document.getElementById('errorModal').classList.remove('active')">ปิดหน้าต่าง</button>
     </div>
 </div>
@@ -345,7 +368,7 @@
             <div class="countdown-text" id="countdownNumber">5</div>
         </div>
         <h3 style="color: var(--success); margin:0 0 5px 0;">กรุณารอ...</h3>
-        <p style="margin:0; font-size:12px; color:#cbd5e1;">ระบบตรวจสอบบิลและสลิปธนาคารอัตโนมัติ</p>
+        <p style="margin:0; font-size:12px; color:#cbd5e1;">ระบบกำลังตรวจสอบความถูกต้องสลิปโอนเงิน</p>
     </div>
 </div>
 
@@ -362,14 +385,17 @@
 
 <div class="modal-overlay" id="depositModal">
     <div class="modal-box" style="max-width: 420px; text-align: left;">
-        <h3 style="color: var(--primary); margin-top:0; text-align: center;">🪙 เติมเงินเครดิตเข้ากระเป๋า</h3>
+        <h3 style="color: var(--primary); margin-top:0; text-align: center;">🪙 เติมเงินเครดิตเข้าระบบ</h3>
         
         <div class="deposit-channels">
             <button class="channel-btn active" id="btnChWallet" onclick="switchDepositChannel('wallet')">🧧 ซองอั่งเปา</button>
-            <button class="channel-btn" id="btnChBank" onclick="switchDepositChannel('bank')">🏦 ธนาคารพาณิชย์</button>
+            <button class="channel-btn" id="btnChBank" onclick="switchDepositChannel('bank')">🏦 โอนเงินผ่านธนาคาร</button>
         </div>
 
         <div class="deposit-panel active" id="panelWallet">
+            <div style="background:rgba(236,72,153,0.1); padding:10px; border-radius:6px; font-size:11px; margin-bottom:12px; border-left:3px solid var(--secondary);">
+                ส่งเงินเข้าเบอร์แอดมินหลัก: <span id="depositWalletPhoneLabel" style="color:var(--secondary); font-weight:bold;">088-765-4321</span>
+            </div>
             <div class="form-group">
                 <label>วางลิงก์ซองของขวัญ TrueMoney Wallet</label>
                 <input type="text" id="walletLinkInput" placeholder="https://gift.truemoney.com/campaign/v1/collect?...">
@@ -378,12 +404,11 @@
         </div>
 
         <div class="deposit-panel" id="panelBank">
-            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; font-size:12px; margin-bottom:12px; border-left:3px solid var(--primary);">
-                <strong>บัญชีร้าน:</strong> ธนาคารกสิกรไทย<br>
-                <strong>เลขบัญชี:</strong> 099-1-23456-7 (บจก. นัมเบอ ช็อป วีพีเอ็น)
+            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; font-size:11px; margin-bottom:12px; border-left:3px solid var(--primary);">
+                <strong>โอนมาที่บัญชี:</strong> <span id="depositBankInfoLabel" style="color:#fff;">ธนาคารกสิกรไทย เลขที่ 099-1-23456-7</span>
             </div>
             <div class="form-group">
-                <label>แนบไฟล์รูปภาพหลักฐานใบโอนเงิน (สลิปโอนเงิน)</label>
+                <label>แนบไฟล์รูปภาพหลักฐานโอนเงิน (แจ้งสลิปสแกนบิล)</label>
                 <input type="file" id="bankSlipFile" accept="image/*" style="padding:6px;">
             </div>
             <button class="btn-submit" style="background:var(--success); color:#000;" onclick="processBankSlipUpload()">ส่งหลักฐานและแจ้งสลิป</button>
@@ -396,7 +421,7 @@
 </div>
 
 <script>
-    // พื้นหลังอนิเมชันดวงดาว
+    // พื้นหลังอนิเมชันดวงดาวเคลื่อนไหว
     const canvas = document.getElementById('space-canvas'); const ctx = canvas.getContext('2d'); let stars = [];
     function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     window.addEventListener('resize', resizeCanvas); resizeCanvas();
@@ -408,15 +433,17 @@
     }
     drawStars();
 
-    // เริ่มต้นระบบจัดการฐานข้อมูลภายใน LocalStorage
-    if(!localStorage.getItem('shopUsersV3')) {
+    // เริ่มต้นระบบความปลอดภัยและฐานข้อมูล
+    if(!localStorage.getItem('shopUsersV4')) {
         const dUsers = [
             {username: 'admin', password: '123', role: 'admin', balance: 9999},
-            {username: 'phum', password: '123', role: 'member', balance: 100}
+            {username: 'phum', password: '123', role: 'member', balance: 75}
         ];
-        localStorage.setItem('shopUsersV3', JSON.stringify(dUsers));
+        localStorage.setItem('shopUsersV4', JSON.stringify(dUsers));
     }
-    if(!localStorage.getItem('shopLogsV3')) localStorage.setItem('shopLogsV3', JSON.stringify([]));
+    if(!localStorage.getItem('shopLogsV4')) localStorage.setItem('shopLogsV4', JSON.stringify([]));
+    if(!localStorage.getItem('paymentPhone')) localStorage.setItem('paymentPhone', '088-765-4321');
+    if(!localStorage.getItem('paymentBank')) localStorage.setItem('paymentBank', 'ธนาคารกสิกรไทย เลขที่ 099-1-23456-7 (บจก. นัมเบอ ช็อป)');
 
     let activeUser = null; let selectedCarrier = "AIS";
 
@@ -428,18 +455,18 @@
     function registerProcess() {
         const u = document.getElementById('reg-user').value.trim();
         const p = document.getElementById('reg-pass').value.trim();
-        if(!u || p.length < 4) { alert('กรุณากรอกรหัสและข้อมูลให้ถูกต้องครับ!'); return; }
-        let users = JSON.parse(localStorage.getItem('shopUsersV3'));
-        if(users.some(x => x.username.toLowerCase() === u.toLowerCase())) { alert('ชื่อนี้ถูกใช้งานแล้วครับ'); return; }
+        if(!u || p.length < 4) { alert('กรุณากรอกข้อมูลและกำหนดรหัสผ่าน 4 ตัวขึ้นไปครับ'); return; }
+        let users = JSON.parse(localStorage.getItem('shopUsersV4'));
+        if(users.some(x => x.username.toLowerCase() === u.toLowerCase())) { alert('ชื่อบัญชีนี้มีอยู่ในระบบแล้ว!'); return; }
         users.push({username: u, password: p, role: 'member', balance: 0});
-        localStorage.setItem('shopUsersV3', JSON.stringify(users));
+        localStorage.setItem('shopUsersV4', JSON.stringify(users));
         alert('สมัครสมาชิกเรียบร้อย!'); toggleAuthPage('login-page');
     }
 
     function loginProcess() {
         const u = document.getElementById('login-user').value.trim();
         const p = document.getElementById('login-pass').value.trim();
-        let users = JSON.parse(localStorage.getItem('shopUsersV3'));
+        let users = JSON.parse(localStorage.getItem('shopUsersV4'));
         let target = users.find(x => x.username === u && x.password === p);
         if(target) {
             activeUser = target;
@@ -447,9 +474,14 @@
             document.getElementById('userBalanceDisplay').innerText = target.balance;
             document.getElementById('globalNav').style.display = 'flex';
             document.getElementById('adminMenuLink').style.display = (target.role === 'admin') ? 'block' : 'none';
+            
+            // โหลดข้อมูลตัวเลือกช่องทางจ่ายเงินขึ้นหน้าต่างเติมเงิน
+            document.getElementById('depositWalletPhoneLabel').innerText = localStorage.getItem('paymentPhone');
+            document.getElementById('depositBankInfoLabel').innerText = localStorage.getItem('paymentBank');
+            
             showShopPage();
         } else {
-            alert('ข้อมูลผู้ใช้หรือรหัสผ่านผิดพลาด!');
+            alert('ชื่อผู้ใช้หรือรหัสผ่านผิดพลาด!');
         }
     }
 
@@ -458,11 +490,17 @@
     function executeLogout() {
         activeUser = null; closeLogoutModal();
         document.getElementById('globalNav').style.display = 'none';
-        document.getElementById('shopOutputBox').style.display = 'none';
+        document.getElementById('userLatestOutput').style.display = 'none';
         toggleAuthPage('login-page');
     }
 
     function showShopPage() { toggleAuthPage('main-shop-page'); calculateInvoiceCost(); }
+    
+    function showHistoryPage() {
+        toggleAuthPage('history-page');
+        loadUserHistoryTable();
+    }
+
     function changeCarrier(cName) {
         selectedCarrier = cName;
         document.querySelectorAll('.carrier-tab').forEach(t => t.classList.remove('active'));
@@ -473,10 +511,10 @@
         const days = document.getElementById('vpnDuration').value;
         const devices = document.getElementById('vpnDevices').value;
         let base = 0;
-        if(days === "3") base = 13;
+        if(days === "3") base = 15;
         else if(days === "7") base = 25;
         else if(days === "15") base = 35;
-        else if(days === "30") base = 45;
+        else if(days === "30") base = 50;
         let addon = (parseInt(devices) >= 2) ? 5 : 0;
         let total = base + addon;
         document.getElementById('invBase').innerText = base + " บาท";
@@ -485,30 +523,30 @@
         return total;
     }
 
-    // ฟังก์ชันสั่งซื้อและเรนเดอร์ภาพ QR CODE (แก้ไขบั๊กรูปภาพไม่โหลดแล้ว)
+    // ฟังก์ชันซื้อแพ็กเกจ -> ซื้อเสร็จเด้งไปหน้าประวัติการซื้อพร้อมเจาะรูปภาพโลโก้ตรงกลาง
     function purchaseVpnProcess() {
         const name = document.getElementById('vpnUsername').value.trim();
         const days = document.getElementById('vpnDuration').value;
         const total = calculateInvoiceCost();
         const devices = document.getElementById('vpnDevices').value;
 
-        if(!name) { alert('กรุณาระบุชื่อไฟล์คอนฟิกครับ'); return; }
-        let logs = JSON.parse(localStorage.getItem('shopLogsV3')) || [];
+        if(!name) { alert('กรุณาระบุชื่อไฟล์คอนฟิกก่อนทำการส่งซื้อครับ'); return; }
+        let logs = JSON.parse(localStorage.getItem('shopLogsV4')) || [];
 
         if(days === "1" && activeUser.role !== 'admin') {
             let today = new Date().toLocaleDateString();
             let limitCheck = logs.some(l => l.creator === activeUser.username && l.dateOnly === today && l.duration === "1 วัน");
-            if(limitCheck) { alert('สิทธิ์สร้างไฟล์ฟรี 1 วันใช้งานครบโควต้าวันนี้แล้วครับ!'); return; }
+            if(limitCheck) { alert('คุณใช้งานสิทธิ์สร้างไฟล์ใช้งานฟรีสำหรับวันนี้ครบแล้วครับ!'); return; }
         }
 
         if(activeUser.role !== 'admin' && activeUser.balance < total) {
-            alert('ยอดเงินคงเหลือไม่เพียงพอ กรุณาเติมเครดิตเงินก่อนชำระเงินครับ!'); return; }
+            alert('ยอดเงินคงเหลือของคุณไม่เพียงพอ กรุณาเติมเครดิตก่อนชำระเงินครับ!'); return; }
 
         if(activeUser.role !== 'admin') {
-            let users = JSON.parse(localStorage.getItem('shopUsersV3'));
+            let users = JSON.parse(localStorage.getItem('shopUsersV4'));
             let idx = users.findIndex(x => x.username === activeUser.username);
             users[idx].balance -= total; activeUser.balance = users[idx].balance;
-            localStorage.setItem('shopUsersV3', JSON.stringify(users));
+            localStorage.setItem('shopUsersV4', JSON.stringify(users));
             document.getElementById('userBalanceDisplay').innerText = activeUser.balance;
         }
 
@@ -518,40 +556,60 @@
         const cName = `NUMBER-SHOP-[${selectedCarrier}]-${name}-${days}Days`;
         const vmess = "vmess://" + btoa(JSON.stringify({ "v":"2", "ps":cName, "add":"th-vpn.numbershop.net", "port":"443", "id":uuid, "aid":"0", "net":"ws", "path":"/vpn", "tls":"tls" }));
         
+        // เซ็ตข้อความโค้ดลงหน้าจอ
         document.getElementById('v2rayTextOutput').innerText = vmess;
         
-        // แก้ไขกระบวนการเรนเดอร์ภาพคิวอาร์โค้ดลงบอร์ด
+        // เคลียร์และสร้างคิวอาร์โค้ดแบบ Custom
         const qrContainer = document.getElementById('qrcodeCanvas');
         qrContainer.innerHTML = ""; 
         setTimeout(() => {
-            new QRCode(qrContainer, { text: vmess, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.L });
-        }, 50);
+            new QRCode(qrContainer, { text: vmess, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.H });
+        }, 40);
 
-        document.getElementById('shopOutputBox').style.display = 'block';
-        toggleOutTab('txt');
-
-        // สุ่มสถานะอุปกรณ์ใช้งานเริ่มต้น เช่น 0 อุปกรณ์ จากโควต้า
+        // บันทึกลง Logs ระบบหลังบ้าน (สุ่มเลขเครื่องให้ตรงเงื่อนไข เช่น 0/3)
         logs.unshift({
             id: Date.now(), creator: activeUser.username, configName: cName,
             carrier: selectedCarrier, duration: days + ' วัน',
             deviceStatus: `0/${devices}`, dateOnly: new Date().toLocaleDateString()
         });
-        localStorage.setItem('shopLogsV3', JSON.stringify(logs));
-        alert('สร้างไฟล์และสร้าง QR Code สำเร็จแล้วครับ!');
+        localStorage.setItem('shopLogsV4', JSON.stringify(logs));
+        
+        alert('🎉 สั่งซื้อสำเร็จ! ระบบกำลังพาคุณไปยังหน้าประวัติไฟล์เพื่อเปิดใช้งานสิทธิ์คิวอาร์โค้ด');
+        
+        // เด้งไปหน้าประวัติสั่งซื้อทันทีตามต้องการ
+        document.getElementById('userLatestOutput').style.display = 'block';
+        showHistoryPage();
     }
 
-    function toggleOutTab(type) {
-        document.getElementById('tabTxt').classList.toggle('active', type === 'txt');
-        document.getElementById('tabQr').classList.toggle('active', type === 'qr');
-        document.getElementById('out-txt-panel').style.display = (type === 'txt') ? 'block' : 'none';
-        document.getElementById('out-qr-panel').style.display = (type === 'qr') ? 'block' : 'none';
+    function loadUserHistoryTable() {
+        const logs = JSON.parse(localStorage.getItem('shopLogsV4')) || [];
+        const tbody = document.getElementById('userHistoryTableBody'); tbody.innerHTML = '';
+        
+        // กรองเอาเฉพาะข้อมูลของผู้ใช้ทั่วไปที่ล็อกอินอยู่ (ไม่รวมของแอดมินหรือคนอื่น)
+        let myLogs = logs.filter(l => l.creator === activeUser.username);
+        
+        if(myLogs.length === 0) { 
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">ไม่พบประวัติการสั่งซื้อไฟล์ VPN</td></tr>`; 
+            return; 
+        }
+        
+        myLogs.forEach(l => {
+            let row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="word-break:break-all;"><strong>${l.configName}</strong></td>
+                <td><span style="color:var(--primary);">${l.carrier}</span></td>
+                <td>${l.duration}</td>
+                <td style="color:var(--success); font-weight:bold;">${l.deviceStatus} เครื่อง</td>
+            `;
+            tbody.appendChild(row);
+        });
     }
 
     function copyV2rayCode() {
-        navigator.clipboard.writeText(document.getElementById('v2rayTextOutput').innerText); alert('คัดลอกรหัสเรียบร้อย!');
+        navigator.clipboard.writeText(document.getElementById('v2rayTextOutput').innerText); alert('คัดลอกรหัสข้อมูล VPN เรียบร้อย!');
     }
 
-    // ส่วนหน้าต่างควบคุมสลับช่องทางเติมเงิน
+    // เมนูควบคุมหน้าต่างเติมเงินเครดิตแยกส่วน
     function openDepositModal() { document.getElementById('depositModal').classList.add('active'); switchDepositChannel('wallet'); }
     function closeDepositModal() { document.getElementById('depositModal').classList.remove('active'); }
     function switchDepositChannel(ch) {
@@ -561,23 +619,23 @@
         document.getElementById('panelBank').style.display = (ch === 'bank') ? 'block' : 'none';
     }
 
-    // จัดการตรวจจับลิงก์ซองของขวัญอั่งเปา
+    // ฟังก์ชันตรวจเช็กลิงก์อั่งเปาทรูมันนี่ -> หากผิดจะเด้งหน้าต่างกากบาทข้อมูลผิดพลาด
     function processWalletGift() {
         const url = document.getElementById('walletLinkInput').value.trim();
-        if(!url.includes('gift.truemoney.com/campaign/v1/collect')) {
+        if(!url.includes('gift.truemoney.com/campaign/v1/collect') || url.length < 50) {
             closeDepositModal(); document.getElementById('walletLinkInput').value = '';
             document.getElementById('errorModal').classList.add('active'); return;
         }
         let bonus = Math.floor(Math.random()*40) + 15;
         updateUserCredit(activeUser.username, bonus);
-        alert(`🧧 ซองอั่งเปาถูกต้อง! เครดิตเพิ่มเข้ากระเป๋าจำนวน +${bonus} บาทเรียบร้อยแล้ว`);
+        alert(`🧧 ลิงก์ซองของขวัญถูกต้อง! เครดิตเพิ่มเข้ากระเป๋าจำนวน +${bonus} บาทเรียบร้อยแล้ว`);
         closeDepositModal(); document.getElementById('walletLinkInput').value = '';
     }
 
-    // ฟังก์ชันนับถอยหลังวงกลมวิ่งรอบตัวเลข 5 4 3 2 1
+    // อัปโหลดสลิปแจ้งโอนเงิน -> นับถอยหลังวงกลมวิ่งรอบตัวเลข 5...4...3...2...1
     function processBankSlipUpload() {
         const file = document.getElementById('bankSlipFile').value;
-        if(!file) { alert('กรุณาเลือกไฟล์สลิปธนาคารก่อนส่งหลักฐานครับ'); return; }
+        if(!file) { alert('กรุณาทำการอัปโหลดไฟล์รูปภาพหลักฐานโอนเงินก่อนครับ'); return; }
         
         closeDepositModal();
         const cdModal = document.getElementById('countdownModal');
@@ -595,19 +653,19 @@
             
             if(count <= 0) {
                 clearInterval(timer); cdModal.classList.remove('active');
-                updateUserCredit(activeUser.username, 50); // โอนเงินสำเร็จจำลองรับ 50 บาท
-                alert('🏦 ระบบตรวจสอบสลิปเสร็จสมบูรณ์ อนุมัติเครดิต +50 บาทให้คุณแล้วครับ');
+                updateUserCredit(activeUser.username, 50); 
+                alert('🏦 ระบบตรวจสอบโครงสร้างสลิปสำเร็จ! ได้รับยอดเงินเครดิตจำนวน +50 บาทเรียบร้อย');
                 document.getElementById('bankSlipFile').value = '';
             }
         }, 1000);
     }
 
     function updateUserCredit(username, amt) {
-        let users = JSON.parse(localStorage.getItem('shopUsersV3'));
+        let users = JSON.parse(localStorage.getItem('shopUsersV4'));
         let idx = users.findIndex(x => x.username === username);
         if(idx !== -1) {
             users[idx].balance += amt;
-            localStorage.setItem('shopUsersV3', JSON.stringify(users));
+            localStorage.setItem('shopUsersV4', JSON.stringify(users));
             if(activeUser && activeUser.username === username) {
                 activeUser.balance = users[idx].balance;
                 document.getElementById('userBalanceDisplay').innerText = activeUser.balance;
@@ -615,22 +673,31 @@
         }
     }
 
-    // ================= แผงหลังบ้านควบคุมสำหรับแอดมิน =================
+    // ================= ⚙️ ฟังก์ชันการจัดการเมนูรวมหลังบ้าน ADMIN (UNIFIED BACKEND) =================
     function showAdminPage() {
         toggleAuthPage('admin-panel-page');
-        loadAdminUsersTable(); loadAdminLogsTable();
+        
+        // โหลดข้อมูลค่าช่องทางรับเงินปัจจุบันจากระบบมาขึ้นแสดงผลบนฟอร์ม
+        document.getElementById('adminSettingWalletPhone').value = localStorage.getItem('paymentPhone');
+        document.getElementById('adminSettingBankInfo').value = localStorage.getItem('paymentBank');
+        
+        loadAdminUsersTable(); 
+        loadAdminLogsTable();
     }
 
+    // [1] ฟังก์ชันโหลดตารางจัดการเครดิตผู้ใช้ในระบบ
     function loadAdminUsersTable() {
-        const users = JSON.parse(localStorage.getItem('shopUsersV3'));
+        const users = JSON.parse(localStorage.getItem('shopUsersV4'));
         const tbody = document.getElementById('adminUserTableBody'); tbody.innerHTML = '';
         users.forEach(u => {
             let row = document.createElement('tr');
             row.innerHTML = `
-                <td><strong>${u.username}</strong></td><td>${u.password}</td><td>${u.role}</td>
+                <td><strong>${u.username}</strong></td>
+                <td><input type="text" value="${u.password}" style="padding:4px; font-size:11px; width:70px; background:#000; border:1px solid #444; color:#fff;" onchange="updateUserPasswordDirectly('${u.username}', this.value)"></td>
+                <td><span style="color:${u.role==='admin'?'var(--secondary)':'#cbd5e1'}">${u.role}</span></td>
                 <td style="color:var(--success); font-weight:bold;">${u.balance} ฿</td>
                 <td>
-                    <input type="number" class="input-credit-sm" id="amt-${u.username}" value="50">
+                    <input type="number" class="input-credit-sm" id="amt-${u.username}" value="20">
                     <button class="btn-action-sm" style="background:var(--success); color:#000;" onclick="adjustUserCredit('${u.username}', true)">+</button>
                     <button class="btn-action-sm" style="background:var(--error);" onclick="adjustUserCredit('${u.username}', false)">-</button>
                 </td>
@@ -639,36 +706,61 @@
         });
     }
 
+    function updateUserPasswordDirectly(uName, newPass) {
+        let users = JSON.parse(localStorage.getItem('shopUsersV4'));
+        let idx = users.findIndex(x => x.username === uName);
+        if(idx !== -1) {
+            users[idx].password = newPass;
+            localStorage.setItem('shopUsersV4', JSON.stringify(users));
+        }
+    }
+
     function adjustUserCredit(uName, isPlus) {
         let inputVal = parseInt(document.getElementById(`amt-${uName}`).value);
         if(isNaN(inputVal) || inputVal <= 0) return;
         let change = isPlus ? inputVal : -inputVal;
         
-        let users = JSON.parse(localStorage.getItem('shopUsersV3'));
+        let users = JSON.parse(localStorage.getItem('shopUsersV4'));
         let idx = users.findIndex(x => x.username === uName);
         if(idx !== -1) {
             users[idx].balance += change;
             if(users[idx].balance < 0) users[idx].balance = 0;
-            localStorage.setItem('shopUsersV3', JSON.stringify(users));
+            localStorage.setItem('shopUsersV4', JSON.stringify(users));
             if(activeUser && activeUser.username === uName) {
                 activeUser.balance = users[idx].balance;
                 document.getElementById('userBalanceDisplay').innerText = activeUser.balance;
             }
-            loadAdminUsersTable(); alert('จัดการปรับยอดเงินเครดิตลูกค้าสำเร็จ!');
+            loadAdminUsersTable();
         }
     }
 
+    // [2] ฟังก์ชันเซฟเปลี่ยนช่องทางรับเงิน
+    function saveSystemPaymentSettings() {
+        const phone = document.getElementById('adminSettingWalletPhone').value.trim();
+        const bank = document.getElementById('adminSettingBankInfo').value.trim();
+        
+        localStorage.setItem('paymentPhone', phone);
+        localStorage.setItem('paymentBank', bank);
+        
+        document.getElementById('depositWalletPhoneLabel').innerText = phone;
+        document.getElementById('depositBankInfoLabel').innerText = bank;
+        
+        alert('💾 อัปเดตข้อมูลเบอร์และเลขธนาคารรับเงินฝั่งหน้าบ้านของลูกค้าสำเร็จแล้วครับ!');
+    }
+
+    // ฟังก์ชันโหลดตารางประวัติคุมไฟล์และคำสั่งลบไฟล์ของแอดมิน
     function loadAdminLogsTable() {
-        const logs = JSON.parse(localStorage.getItem('shopLogsV3')) || [];
+        const logs = JSON.parse(localStorage.getItem('shopLogsV4')) || [];
         const tbody = document.getElementById('adminLogsTableBody'); tbody.innerHTML = '';
-        if(logs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">ไม่มีข้อมูลไฟล์ประวัติ</td></tr>`; return; }
+        if(logs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">ไม่มีข้อมูลไฟล์ประวัติในระบบ</td></tr>`; return; }
         
         logs.forEach(l => {
             let row = document.createElement('tr');
             row.innerHTML = `
-                <td>${l.creator}</td><td style="word-break:break-all;">${l.configName}</td>
-                <td><span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">${l.carrier}</span></td>
-                <td style="font-weight:bold; color:var(--primary);">${l.deviceStatus} เครื่อง</td>
+                <td><span style="color:var(--secondary);">${l.creator}</span></td>
+                <td style="word-break:break-all; font-size:11px;">${l.configName}</td>
+                <td><span style="background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;">${l.carrier}</span></td>
+                <td style="font-weight:bold; color:var(--primary);">${l.deviceStatus}</td>
                 <td><button class="btn-action-sm" style="background:var(--error);" onclick="deleteVpnLog(${l.id})">❌ ลบไฟล์</button></td>
             `;
             tbody.appendChild(row);
@@ -676,10 +768,10 @@
     }
 
     function deleteVpnLog(id) {
-        if(confirm('ต้องการยืนยันคำสั่งลบไฟล์และตัดสัญญาณสิทธิ์นี้ใช่ไหม?')) {
-            let logs = JSON.parse(localStorage.getItem('shopLogsV3')) || [];
+        if(confirm('คุณแน่ใจใช่ไหมที่จะยืนยันสั่งลบกู้คืนสิทธิ์และถอดไฟล์นี้ออกจากฐานข้อมูล?')) {
+            let logs = JSON.parse(localStorage.getItem('shopLogsV4')) || [];
             logs = logs.filter(x => x.id !== id);
-            localStorage.setItem('shopLogsV3', JSON.stringify(logs));
+            localStorage.setItem('shopLogsV4', JSON.stringify(logs));
             loadAdminLogsTable();
         }
     }
